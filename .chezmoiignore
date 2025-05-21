@@ -1,0 +1,12 @@
+LICENSE
+README.md
+{{ if ne .chezmoi.os "windows" }}
+Documents
+*.ps1
+{{ end }}
+{{ if eq .chezmoi.os "windows" }}
+.bashrc
+.bash_logout
+.zshrc
+.profile
+{{ end }}
