@@ -17,6 +17,7 @@ packages:
     - 'VideoLAN.VLC'
   ubuntu:
     apt:
+    - 'bind9-dnsutils'
     - 'libdbd-mysql-perl'
     - 'mysql-client' 
     - 'make' 
@@ -29,15 +30,16 @@ packages:
     - 'libxml-simple-perl'
     cpan:
     - 'Term::ReadKey'
-    - 'Term::ReadLine::Perl '
-    - 'CGI Date::Calc '
+    - 'Term::ReadLine::Perl'
+    - 'CGI' 
+    - 'Date::Calc'
     - 'Class::DBI'
     - 'Digest::SHA1'
     - 'JSON'
     - 'LWP::UserAgent'
     - 'Mail::Sendmail'
     - 'Perl::LanguageServer'
-    - 'HTML::Template::Expr '
+    - 'HTML::Template::Expr'
     - 'Switch'
     - 'Captcha::reCAPTCHA::V2'
     - 'Digest::HMAC_SHA1'

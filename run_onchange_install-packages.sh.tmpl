@@ -1,0 +1,10 @@
+{{ if ne .chezmoi.os "windows" -}}
+#!/bin/bash
+
+{{ if eq .osid "linux-ubuntu" -}}
+sudo apt install {{ range .packages.ubuntu.apt}}{{ . | quote }} {{ end -}}
+{{ end }}
+sudo cpan {{ range .packages.ubuntu.cpan}}{{ . | quote }} {{ end}}
+sudo cpan -T {{ range .packages.ubuntu.cpanT}}{{ . | quote }} {{ end }}
+
+{{ end -}}
