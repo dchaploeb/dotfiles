@@ -1,0 +1,21 @@
+{{ if ne .chezmoi.os "windows" -}}
+#!/bin/bash
+
+# Check current shell
+CURRENT_SHELL="$(getent passwd $USER | cut -d: -f7)"
+ZSH_PATH="$(command -v zsh)"
+
+if [ "$CURRENT_SHELL" != "$ZSH_PATH" ]; then
+    echo "Changing default shell to Zsh..."
+    chsh -s "$ZSH_PATH"
+fi
+
+# Install oh-my-zsh if not present
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing oh-my-zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+else
+    echo "oh-my-zsh already installed"
+fi
+
+{{ end -}}
