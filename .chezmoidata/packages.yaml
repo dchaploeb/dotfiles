@@ -28,6 +28,7 @@ packages:
     - 'apache2'
     - 'librest-client-perl'
     - 'libxml-simple-perl'
+    - 'wsl-setup'
     cpan:
     - 'Term::ReadKey'
     - 'Term::ReadLine::Perl'
