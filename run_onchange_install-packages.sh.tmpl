@@ -8,9 +8,9 @@ sudo apt install {{ range .packages.linux.apt}}{{ . | quote }} {{ end }}
 sudo apt install {{ range .packages.ubuntu.apt}}{{ . | quote }} {{ end }}
 {{ end -}}
 {{ if eq .osid "linux-kali" -}}
-echo "Ubuntu; installing packages:"
-sudo apt install {{ range .packages.linux.apt}}{{ . | quote }} {{ end }}
-sudo apt install {{ range .packages.kali.apt}}{{ . | quote }} {{ end }}
+echo "Kali; installing packages:"
+sudo apt install {{ range .packages.kali.apt}}{{ . | quote }} {{ end -}}
+sudo apt install {{ range .packages.kali.apt}}{{ . | quote }} {{ end -}}
 {{ end -}}
 {{ if .perl }}
 echo "Perl is enabled; installing packages:"
