@@ -4,10 +4,12 @@
 echo "Non-windows environment..."
 {{ if eq .osid "linux-ubuntu" -}}
 echo "Ubuntu; installing packages:"
+sudo apt update
 sudo apt install {{ range .packages.ubuntu.apt}}{{ . | quote }} {{ end -}}
 {{ end -}}
 {{ if eq .osid "linux-kali" -}}
-echo "Ubuntu; installing packages:"
+echo "Kali; installing packages:"
+sudo apt update
 sudo apt install {{ range .packages.kali.apt}}{{ . | quote }} {{ end -}}
 {{ end -}}
 {{ if .perl }}
