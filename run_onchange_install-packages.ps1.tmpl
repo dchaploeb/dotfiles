@@ -1,0 +1,31 @@
+{{ if eq .chezmoi.os "windows" -}}
+{{ if .perl }}
+echo "Perl is enabled; installing packages:"
+sudo cpan {{ range .packages.all.cpan}}{{ . | quote }} {{ end}}
+sudo cpan -T {{ range .packages.all.cpanT}}{{ . | quote }} {{ end }}
+{{ end -}}
+
+# Step 1: List of package IDs we want to install
+$requestedPackageIds = @(
+{{- $last := sub (len .packages.windows.winget) 1 -}}
+{{- range $i, $pkg := .packages.windows.winget }}
+    {{ $pkg | quote }}{{ if lt $i $last }},{{ end }}
+{{- end }}
+)
+
+# Step 2: Extract clean IDs from winget list (skip junk)
+$installedPackages = Get-WinGetPackage | Where-Object { $_.Source -eq "winget" } | Select-Object -ExpandProperty Id
+
+
+# Step 3: Install anything missing
+function Install-WingetIfMissing($id, $installedPackages) {
+    if (-not ($installedPackages -contains $id)) {
+        winget install -i $id -e --no-upgrade
+    }
+}
+
+# Step 4: Loop over requested packages
+foreach ($id in $requestedPackageIds) {
+    Install-WingetIfMissing $id $installedPackages
+}
+{{ end -}}
