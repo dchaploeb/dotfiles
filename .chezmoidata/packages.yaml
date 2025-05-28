@@ -17,6 +17,9 @@ packages:
     - 'Proton.ProtonDrive'
     - 'VideoLAN.VLC'
     - 'HTTPToolKit.HTTPToolKit'
+  linux:
+    apt:
+    - 'zsh'
   ubuntu:
     apt:
     - 'bind9-dnsutils'
