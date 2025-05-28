@@ -5,12 +5,13 @@
 
 [data]
     osid = {{ $osid | quote }}
+    perl = 0
 
 [edit]
     command = "code"
     args = "--wait"
 
 [diff]
-command = "code"
-args = ["--wait", "--diff"]
+    command = "code"
+    args = ["--wait", "--diff"]
 

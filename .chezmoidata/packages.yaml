@@ -19,8 +19,8 @@ packages:
     apt:
     - 'bind9-dnsutils'
     - 'libdbd-mysql-perl'
-    - 'mysql-client' 
-    - 'make' 
+    - 'mysql-client'
+    - 'make'
     - 'gcc'
     - 'g++'
     - 'libperl-dev'
@@ -28,11 +28,14 @@ packages:
     - 'apache2'
     - 'librest-client-perl'
     - 'libxml-simple-perl'
-    - 'wsl-setup'
+  kali:
+    apt:
+    - 'man-db'
+  perl:
     cpan:
     - 'Term::ReadKey'
     - 'Term::ReadLine::Perl'
-    - 'CGI' 
+    - 'CGI'
     - 'Date::Calc'
     - 'Class::DBI'
     - 'Digest::SHA1'
@@ -51,4 +54,3 @@ packages:
     - 'Algorithm::Verhoeff'
     cpanT:
     - 'Net::CampaignMonitor'
-    
