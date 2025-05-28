@@ -10,14 +10,9 @@ sudo apt install {{ range .packages.ubuntu.apt}}{{ . | quote }} {{ end -}}
 echo "Ubuntu; installing packages:"
 sudo apt install {{ range .packages.kali.apt}}{{ . | quote }} {{ end -}}
 {{ end -}}
-{{ end }}
 {{ if .perl }}
 echo "Perl is enabled; installing packages:"
 sudo cpan {{ range .packages.all.cpan}}{{ . | quote }} {{ end}}
 sudo cpan -T {{ range .packages.all.cpanT}}{{ . | quote }} {{ end }}
 {{ end -}}
-
-{{ if eq .chezmoi.os "windows" -}}
-echo "Windows; installing packages:"
-winget install {{ range .packages.windows.winget}}{{. | quote }} {{ end }}
 {{ end -}}
