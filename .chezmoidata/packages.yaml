@@ -14,7 +14,9 @@ packages:
     - 'Notepad++.Notepad++'
     - 'Obsidian.Obsidian'
     - 'OpenWhisperSystems.Signal'
+    - 'Proton.ProtonDrive'
     - 'VideoLAN.VLC'
+    - 'HTTPToolKit.HTTPToolKit'
   ubuntu:
     apt:
     - 'bind9-dnsutils'
