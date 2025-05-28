@@ -1,10 +1,23 @@
 {{ if ne .chezmoi.os "windows" -}}
 #!/bin/bash
 
+echo "Non-windows environment..."
 {{ if eq .osid "linux-ubuntu" -}}
+echo "Ubuntu; installing packages:"
 sudo apt install {{ range .packages.ubuntu.apt}}{{ . | quote }} {{ end -}}
+{{ end -}}
+{{ if eq .osid "linux-kali" -}}
+echo "Ubuntu; installing packages:"
+sudo apt install {{ range .packages.kali.apt}}{{ . | quote }} {{ end -}}
+{{ end -}}
 {{ end }}
-sudo cpan {{ range .packages.ubuntu.cpan}}{{ . | quote }} {{ end}}
-sudo cpan -T {{ range .packages.ubuntu.cpanT}}{{ . | quote }} {{ end }}
+{{ if .perl }}
+echo "Perl is enabled; installing packages:"
+sudo cpan {{ range .packages.all.cpan}}{{ . | quote }} {{ end}}
+sudo cpan -T {{ range .packages.all.cpanT}}{{ . | quote }} {{ end }}
+{{ end -}}
 
+{{ if eq .chezmoi.os "windows" -}}
+echo "Windows; installing packages:"
+winget install {{ range .packages.windows.winget}}{{. | quote }} {{ end }}
 {{ end -}}
