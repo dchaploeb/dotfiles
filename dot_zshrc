@@ -6,6 +6,7 @@ CASE_SENSITIVE="true"
 COMPLETION_WAITING_DOTS="true"
 plugins=(zsh-syntax-highlighting zsh-autosuggestions colored-man-pages chezmoi)
 
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
 source $ZSH/oh-my-zsh.sh
 
 cd $HOME

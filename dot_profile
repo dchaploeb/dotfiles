@@ -25,3 +25,8 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
+
+# Only auto-pull chezmoi if this is an interactive login shell
+if [ -n "$PS1" ] && [ -d "$HOME/chezmoi/.git" ]; then
+    git -C "$HOME/chezmoi" pull --quiet
+fi
