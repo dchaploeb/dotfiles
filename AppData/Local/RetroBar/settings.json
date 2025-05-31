@@ -61,5 +61,6 @@
   "AutoHideTransparent": false,
   "SlideTaskbarButtons": true,
   "ShowClockSeconds": false,
+  "WinNumHotkeysAction": 0,
   "PinnedNotifyIcons": []
 }
