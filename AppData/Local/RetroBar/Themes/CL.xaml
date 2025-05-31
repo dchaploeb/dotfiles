@@ -582,6 +582,13 @@
                                         VerticalAlignment="Center"
                                         Margin="3,0,3,0"
                                         Name="ArrowPanel">
+                                <ContentControl DockPanel.Dock="Right"
+                                    Content="{Binding ClockText, StringFormat='{}{0:hh\\:mm\\:ss\\nMMM dd}'}"
+                                    VerticalAlignment="Center"
+                                    Margin="4"
+                                    Padding="2"
+                                    Foreground="{DynamicResource TextColor}" />
+
                                 <Path Fill="{DynamicResource ButtonForeground}"
                                       Data="M 0,2.5 L 2,5 L 4.5,5 L 2,2.5 L 4.5,0 L 2,0 Z"
                                       RenderOptions.EdgeMode="Aliased"
@@ -590,6 +597,8 @@
                                       Data="M 0,2.5 L 2,5 L 4.5,5 L 2,2.5 L 4.5,0 L 2,0 Z"
                                       RenderOptions.EdgeMode="Aliased"
                                       Name="Arrow2" />
+
+
                             </StackPanel>
                         </Border>
                     </Border>
@@ -819,5 +828,81 @@
         <Setter Property="Margin"
                 Value="0" />
     </Style>
+    <Style TargetType="TextBlock" x:Key="Clock"
+           BasedOn="{StaticResource Clock}">
+        <Setter Property="Margin"
+                Value="5,3" />
+        <Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Path=Orientation, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                               Value="Horizontal"/>
+                    <Condition Binding="{Binding Path=Rows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                               Value="1"/>
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.Setters>
+                    <Setter Property="Margin"
+                            Value="5,-1,5,0" />
+                </MultiDataTrigger.Setters>
+            </MultiDataTrigger>
+            <DataTrigger Binding="{Binding Path=Orientation, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                         Value="Vertical">
+                <DataTrigger.Setters>
+                    <Setter Property="Margin"
+                            Value="0,3" />
+                </DataTrigger.Setters>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 
+    <ControlTemplate TargetType="{x:Type UserControl}" x:Key="ClockTemplateKey">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="{Binding Path=Now, StringFormat=t, Mode=OneWay}"
+                       Style="{DynamicResource Clock}"
+                       Name="ClockText">
+            </TextBlock>
+            <TextBlock Text="{Binding Path=Now, StringFormat=dddd, Mode=OneWay}"
+                       Style="{DynamicResource Clock}"
+                       Name="ClockVerticalDayOfWeek"
+                       Visibility="Visible">
+            </TextBlock>
+            <TextBlock Text="{Binding Path=Now, StringFormat=d, Mode=OneWay}"
+                       Style="{DynamicResource Clock}"
+                       Name="ClockVerticalDate"
+                       Visibility="Visible">
+            </TextBlock>
+
+        </StackPanel>
+        <ControlTemplate.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Path=Orientation, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                         Value="Horizontal"/>
+                    <Condition Binding="{Binding Path=Rows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                               Value="1"/>
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.Setters>
+                    <Setter TargetName="ClockVerticalDayOfWeek"
+                            Property="Visibility"
+                            Value="Collapsed" />
+                    <Setter TargetName="ClockVerticalDate"
+                            Property="Visibility"
+                            Value="Collapsed" />
+                </MultiDataTrigger.Setters>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Path=Orientation, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                         Value="Horizontal"/>
+                    <Condition Binding="{Binding Path=Rows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                               Value="2"/>
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.Setters>
+                    <Setter TargetName="ClockVerticalDayOfWeek"
+                            Property="Visibility"
+                            Value="Collapsed" />
+                </MultiDataTrigger.Setters>
+            </MultiDataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>
