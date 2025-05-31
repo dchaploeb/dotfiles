@@ -1,6 +1,6 @@
 [user]
   name = David Chaplin-Loebell
-  email = david@example.com
+  email = davidcl@weaversway.coop
 [core]
 	editor = code --wait
 [commit]
