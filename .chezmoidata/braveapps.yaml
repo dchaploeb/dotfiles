@@ -1,0 +1,7 @@
+brave_apps:
+- name: Mnemo
+  url: https://chat.openai.com
+- name: Proton Mail
+  url: https://mail.proton.me
+- name: Google Calendar
+  url: https://calendar.google.com

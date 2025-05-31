@@ -6,7 +6,7 @@
   "ShowDesktopButton": true,
   "PeekAtDesktop": false,
   "ShowMultiMon": false,
-  "ShowQuickLaunch": false,
+  "ShowQuickLaunch": true,
   "QuickLaunchPath": "%appdata%\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar",
   "CollapseNotifyIcons": false,
   "InvertNotifyIcons": [
