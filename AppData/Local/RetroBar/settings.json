@@ -1,0 +1,65 @@
+{
+  "Language": "System",
+  "Theme": "CL",
+  "ShowInputLanguage": false,
+  "ShowClock": true,
+  "ShowDesktopButton": true,
+  "PeekAtDesktop": false,
+  "ShowMultiMon": false,
+  "ShowQuickLaunch": false,
+  "QuickLaunchPath": "%appdata%\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar",
+  "CollapseNotifyIcons": false,
+  "InvertNotifyIcons": [
+    "7820ae78-23e3-4229-82c1-e41cb67d5b9c",
+    "7820ae81-23e3-4229-82c1-e41cb67d5b9c",
+    "7820ae82-23e3-4229-82c1-e41cb67d5b9c",
+    "7820ae77-23e3-4229-82c1-e41cb67d5b9c",
+    "7820ae83-23e3-4229-82c1-e41cb67d5b9c",
+    "7820ae74-23e3-4229-82c1-e41cb67d5b9c",
+    "7820ae75-23e3-4229-82c1-e41cb67d5b9c",
+    "7820ae73-23e3-4229-82c1-e41cb67d5b9c"
+  ],
+  "NotifyIconBehaviors": [
+    {
+      "Identifier": "7820ae76-23e3-4229-82c1-e41cb67d5b9c",
+      "Behavior": 2
+    },
+    {
+      "Identifier": "7820ae75-23e3-4229-82c1-e41cb67d5b9c",
+      "Behavior": 2
+    },
+    {
+      "Identifier": "7820ae74-23e3-4229-82c1-e41cb67d5b9c",
+      "Behavior": 2
+    },
+    {
+      "Identifier": "7820ae73-23e3-4229-82c1-e41cb67d5b9c",
+      "Behavior": 2
+    }
+  ],
+  "AllowFontSmoothing": true,
+  "UseSoftwareRendering": false,
+  "Edge": 3,
+  "RowCount": 2,
+  "RowLimit": 5,
+  "TaskbarWidth": 1,
+  "TaskbarWidthLimit": 7,
+  "QuickLaunchOrder": [],
+  "ShowTaskThumbnails": true,
+  "MultiMonMode": 0,
+  "TaskbarScale": 1,
+  "DebugLogging": false,
+  "AutoHide": false,
+  "LockTaskbar": false,
+  "InvertIconsMode": 0,
+  "ShowTaskBadges": true,
+  "TaskMiddleClickAction": 0,
+  "ClockClickAction": 3,
+  "CheckForUpdates": true,
+  "ShowExitMenuItem": true,
+  "ShowStartButtonMultiMon": false,
+  "AutoHideTransparent": false,
+  "SlideTaskbarButtons": true,
+  "ShowClockSeconds": false,
+  "PinnedNotifyIcons": []
+}
