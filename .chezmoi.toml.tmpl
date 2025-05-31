@@ -1,0 +1,20 @@
+{{- $osid := .chezmoi.os -}}
+{{- if hasKey .chezmoi.osRelease "id" -}}
+{{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
+{{- end -}}
+
+[data]
+    osid = {{ $osid | quote }}
+    perl = 0
+
+[edit]
+    command = "code"
+    args = "--wait"
+
+[diff]
+    command = "code"
+    args = ["--wait", "--diff"]
+
+[git]
+    autoCommit = true
+    autoPush = true

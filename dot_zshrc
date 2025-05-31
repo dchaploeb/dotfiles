@@ -1,0 +1,15 @@
+export PATH=$HOME/bin:$PATH
+export ZSH="$HOME/.oh-my-zsh"
+export EDITOR=code
+ZSH_THEME="agnoster"
+CASE_SENSITIVE="true"
+COMPLETION_WAITING_DOTS="true"
+plugins=(zsh-syntax-highlighting zsh-autosuggestions colored-man-pages chezmoi)
+
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
+source $ZSH/oh-my-zsh.sh
+
+cd $HOME
+
+function gamsrd() { "$HOME/bin/gam/gam" "$@" ; }
+alias gam="~/bin/gamadv-xtd3/gam"

@@ -1,0 +1,61 @@
+packages:
+  windows:
+    winget:
+    - 'Brave.Brave'
+    - 'calibre.calibre'
+    - 'dremin.RetroBar'
+    - 'Git.Git'
+    - 'Iterate.Cyberduck'
+    - 'JanDeDobbeleer.OhMyPosh'
+    - 'KeePassXCTeam.KeePassXC'
+    - 'Microsoft.PowerShell'
+    - 'Microsoft.VisualStudioCode'
+    - 'Microsoft.WSL'
+    - 'Notepad++.Notepad++'
+    - 'Obsidian.Obsidian'
+    - 'OpenWhisperSystems.Signal'
+    - 'Proton.ProtonDrive'
+    - 'VideoLAN.VLC'
+    - 'HTTPToolKit.HTTPToolKit'
+  linux:
+    apt:
+    - 'zsh'
+  ubuntu:
+    apt:
+    - 'bind9-dnsutils'
+    - 'libdbd-mysql-perl'
+    - 'mysql-client'
+    - 'make'
+    - 'gcc'
+    - 'g++'
+    - 'libperl-dev'
+    - 'pkg-config'
+    - 'apache2'
+    - 'librest-client-perl'
+    - 'libxml-simple-perl'
+  kali:
+    apt:
+    - 'man-db'
+  perl:
+    cpan:
+    - 'Term::ReadKey'
+    - 'Term::ReadLine::Perl'
+    - 'CGI'
+    - 'Date::Calc'
+    - 'Class::DBI'
+    - 'Digest::SHA1'
+    - 'JSON'
+    - 'LWP::UserAgent'
+    - 'Mail::Sendmail'
+    - 'Perl::LanguageServer'
+    - 'HTML::Template::Expr'
+    - 'Switch'
+    - 'Captcha::reCAPTCHA::V2'
+    - 'Digest::HMAC_SHA1'
+    - 'JSON::Parse'
+    - 'Business::Stripe::WebCheckout'
+    - 'Business::Stripe::Webhook'
+    - 'JSON::MaybeXS'
+    - 'Algorithm::Verhoeff'
+    cpanT:
+    - 'Net::CampaignMonitor'

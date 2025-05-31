@@ -1,6 +1,14 @@
 [user]
-  name = David Chaplin-Loebell
-  email = davidcl@weaversway.coop
+	name = David Chaplin-Loebell
+	email = davidcl@weaversway.coop
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[init]
+	defaultBranch = main
 [core]
 	editor = code --wait
 [commit]
