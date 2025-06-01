@@ -49,3 +49,11 @@ function Add-ToPath {
         }
     }
 }
+
+function ls {
+    $items = gci -Force | ? { -not ($_.Attributes -band 'Hidden') } |  ? { $_.Name -notmatch '^\.' }
+    $maxLen = ($items | Measure-Object -Property Name -Maximum).Maximum.Length + 2
+    $cols = [math]::Max([math]::Floor($Host.UI.RawUI.WindowSize.Width / $maxLen), 1)
+    $items | Select-Object -ExpandProperty Name | Format-Wide -Column $cols | Out-Host
+}
+
