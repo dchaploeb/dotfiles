@@ -17,6 +17,8 @@ packages:
     - 'Proton.ProtonDrive'
     - 'VideoLAN.VLC'
     - 'HTTPToolKit.HTTPToolKit'
+    - 'ImageMagick.ImageMagick'
+    - 'Rustlang.Rustup'
   linux:
     apt:
     - 'zsh'

@@ -1,6 +1,5 @@
-
-$pwshProfile = Join-Path $HOME "Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
-$winProfileDir = Join-Path $HOME "Documents\WindowsPowerShell"
+$pwshProfile = $PROFILE.CurrentUserCurrentHost  
+$winProfileDir = Split-Path -Parent $PROFILE.CurrentUserAllHosts
 $winProfile = Join-Path $winProfileDir "Microsoft.PowerShell_profile.ps1"
 
 if (-Not (Test-Path $winProfileDir)) {
