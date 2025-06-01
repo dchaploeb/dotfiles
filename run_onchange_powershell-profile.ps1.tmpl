@@ -1,0 +1,11 @@
+# DO NOT REMOVE: chezmoi change tracking
+# {{- /* hash: {{ .sourceHash "config/powershell/Microsoft.PowerShell_profile.ps1" }} */ -}}
+
+$target = $PROFILE.CurrentUserCurrentHost
+$source = "{{ .chezmoi.sourceDir }}/dot_config/powershell/Microsoft.PowerShell_profile.ps1"
+
+if (-not (Test-Path (Split-Path $target))) {
+    New-Item -ItemType Directory -Path (Split-Path $target) | Out-Null
+}
+
+Copy-Item -Path $source -Destination $target -Force
