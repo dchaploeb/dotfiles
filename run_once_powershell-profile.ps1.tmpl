@@ -1,5 +1,4 @@
-# DO NOT REMOVE: chezmoi change tracking
-# {{- /* hash: {{ .sourceHash "config/powershell/Microsoft.PowerShell_profile.ps1" }} */ -}}
+# SYNCHASH: {{ (include "dot_config/powershell/Microsoft.PowerShell_profile.ps1") | sha256sum }}
 
 $target = $PROFILE.CurrentUserCurrentHost
 $source = "{{ .chezmoi.sourceDir }}/dot_config/powershell/Microsoft.PowerShell_profile.ps1"
