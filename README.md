@@ -51,7 +51,7 @@ Ideally those steps should pretty much be:
  - ✅ Sync powershell profile
  - TODO: Make Powershell profile go to the right place on powershell 7, on all computers (There is additional complexity because the location of "Documents" may vary).  Right now there are multiple copies of this in the repo, fix.
  - ✅ Sync Windows Terminal Settings
- - TODO: figure out where to put icons and sync those
+ - ✅ figure out where to put icons and sync those
  - ✅ Sync my custom `retrobar` theme and settings on Windows
  
 ## Scripts and aliases

@@ -19,6 +19,7 @@ packages:
     - 'HTTPToolKit.HTTPToolKit'
     - 'ImageMagick.ImageMagick'
     - 'Rustlang.Rustup'
+    - 'GitHub.cli'
   linux:
     apt:
     - 'zsh'
