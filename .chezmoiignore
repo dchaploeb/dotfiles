@@ -4,7 +4,10 @@ TODO.md
 {{ if ne .chezmoi.os "windows" }}
 AppData
 Documents
+OneDrive
 *.ps1
+bin/*.ps1
+bin/pwsh_profile.d
 {{ end }}
 {{ if eq .chezmoi.os "windows" }}
 .bashrc
