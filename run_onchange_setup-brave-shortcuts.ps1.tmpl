@@ -37,7 +37,7 @@ if (-not (Test-Path $iconPng)) {
 # Convert PNG to ICO if missing
 if ((Test-Path $iconPng) -and (-not (Test-Path $iconIco))) {
     try {
-        magick "$iconPng" -define icon:auto-resize="256,128,64,48,32,16" "$iconIco"
+        python convert_png_to_ico.py "$iconPng" "$iconIco"
     } catch {
         Write-Warning "Failed to convert favicon for $name to ICO"
     }
