@@ -5,3 +5,5 @@ brave_apps:
   url: https://mail.proton.me
 - name: Google Calendar
   url: https://calendar.google.com
+- name: ClickUp
+  url: https://app.clickup.com/
