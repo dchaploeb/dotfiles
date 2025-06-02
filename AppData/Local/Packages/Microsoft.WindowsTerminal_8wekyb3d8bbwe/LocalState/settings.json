@@ -85,11 +85,6 @@
                 "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
                 "cursorShape": "bar",
                 "elevate": true,
-                "font": 
-                {
-                    "face": "Cascadia Mono",
-                    "size": 12
-                },
                 "guid": "{0b654c68-9ee2-4f1f-8db4-bbf000f8c9bf}",
                 "hidden": false,
                 "historySize": 9001,
