@@ -54,6 +54,11 @@ Ideally those steps should pretty much be:
  - TODO: Terminal settings sync - inconsistent locations.  Work computer is:
      C:\Users\237\scoop\apps\windows-terminal\current\settings\settings.json
 
+## Scripts and aliases
+ - ✅ On windows, my $PROFILE defines a unix-like `ls` function and a useful `Add-ToPath` function
+ - ✅ Python convert_png_to_ico.py (works!)
+ - TODO: More to come from dev environments.
+
 ## Package management
  -  ✅ Install needed packages on linux
  -  TODO: Seperate some packages that are only needed for certain projects

@@ -87,7 +87,14 @@ function ls {
             continue
         }
 
-        $isFile = (Get-Item -LiteralPath $target).PSIsContainer -eq $false
+        try {
+            $itemMeta = Get-Item -LiteralPath $target -ErrorAction Stop
+            $isFile = -not $itemMeta.PSIsContainer
+        } catch {
+            Write-Host "ls: cannot access '$target': $($_.Exception.Message)" -ForegroundColor Red
+            continue
+        }
+
 
         $items = if ($isFile) {
             Get-Item -LiteralPath $target
