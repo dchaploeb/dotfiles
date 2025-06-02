@@ -46,14 +46,14 @@ Ideally those steps should pretty much be:
 
 ## Dotfiles, Profiles, and Preferences
 
- - ✅ Sync profile scripts for zsh and powershell, and preference files for
-   CLI applications
- - TODO: Make Powershell profile go to the right place on powershell 7, on all computers (There is additional complexity because the location of "Documents" may vary)
- - ✅ Sync preferences for various applications on Windows (mostly located under `~/AppData`)
- - ✅ Sync my custom `retrobar` theme on Windows
- - TODO: Terminal settings sync - inconsistent locations.  Work computer is:
-     C:\Users\237\scoop\apps\windows-terminal\current\settings\settings.json
-
+ - ✅ Sync .gitconfig
+ - ✅ Sync zsh dotfiles
+ - ✅ Sync powershell profile
+ - TODO: Make Powershell profile go to the right place on powershell 7, on all computers (There is additional complexity because the location of "Documents" may vary).  Right now there are multiple copies of this in the repo, fix.
+ - ✅ Sync Windows Terminal Settings
+ - TODO: figure out where to put icons and sync those
+ - ✅ Sync my custom `retrobar` theme and settings on Windows
+ 
 ## Scripts and aliases
  - ✅ On windows, my $PROFILE defines a unix-like `ls` function and a useful `Add-ToPath` function
  - ✅ Python convert_png_to_ico.py (works!)
@@ -70,3 +70,5 @@ Ideally those steps should pretty much be:
  - ✅ Sync Retrobar theme and prefs
  - TODO: Start11 integration (or other start menu manager, if I can find one that meets my needs.)
  - TODO: Build and install Web shortcuts, put them in the start menu
+
+ 
