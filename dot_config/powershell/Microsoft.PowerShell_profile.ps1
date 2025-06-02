@@ -95,6 +95,8 @@ function ls {
             Get-ChildItem -Force -LiteralPath $target
         }
 
+        $items = @($items)
+
         if (-not $showAll) {
             $items = $items | Where-Object { $_.Name -notmatch '^\.' -and -not ($_.Attributes -match 'Hidden|System') }
         }
@@ -103,6 +105,8 @@ function ls {
             Write-Host ""
             Write-Host ("${target}:") -ForegroundColor Yellow
         }
+
+        $items = @($items)
 
         if ($longList) {
             $items | Format-Table Mode, LastWriteTime, Length, Name

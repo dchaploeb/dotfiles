@@ -1,7 +1,9 @@
 # SYNCHASH: {{ (include "dot_config/powershell/Microsoft.PowerShell_profile.ps1") | sha256sum }}
-
+Write-Host "Shell: $($PSVersionTable.PSEdition), Version: $($PSVersionTable.PSVersion)"
 $target = $PROFILE.CurrentUserCurrentHost
 $source = "{{ .chezmoi.sourceDir }}/dot_config/powershell/Microsoft.PowerShell_profile.ps1"
+Write-Host "Copying profile to $target from $source"
+Test-Path $source
 
 if (-not (Test-Path (Split-Path $target))) {
     New-Item -ItemType Directory -Path (Split-Path $target) | Out-Null
