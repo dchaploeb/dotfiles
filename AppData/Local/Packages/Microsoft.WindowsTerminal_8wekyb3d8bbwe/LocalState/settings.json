@@ -111,14 +111,14 @@
                 "commandline": "ssh david@c1.weaversway.coop",
                 "guid": "{ae319249-759a-42c9-82cb-4076f50df114}",
                 "hidden": false,
-                "icon": "C:\\Users\\dchap\\OneDrive\\Pictures\\icons\\99306_and_taskbar_menu_start_icon.png",
+                "icon": "%LOCALAPPDATA%\\resources\\ssh-96.png",
                 "name": "c1.weaversway.coop"
             },
             {
                 "commandline": "ssh david@c2.weaversway.coop",
                 "guid": "{bd7c78d1-2cb2-4b59-adea-a47c3dd1e363}",
                 "hidden": false,
-                "icon": "C:\\Users\\dchap\\OneDrive\\Pictures\\icons\\99306_and_taskbar_menu_start_icon.png",
+                "icon": "%LOCALAPPDATA%\\resources\\ssh-96.png",
                 "name": "c2.weaversway.coop"
             },
             {
