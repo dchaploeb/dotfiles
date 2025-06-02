@@ -37,7 +37,7 @@ if (-not (Test-Path $iconPng)) {
 # Convert PNG to ICO if missing
 if ((Test-Path $iconPng) -and (-not (Test-Path $iconIco))) {
     try {
-        python convert_png_to_ico.py "$iconPng" "$iconIco"
+        python ~/bin/convert_png_to_ico.py "$iconPng" "$iconIco"
     } catch {
         Write-Warning "Failed to convert favicon for $name to ICO"
     }
