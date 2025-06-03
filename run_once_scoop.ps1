@@ -1,4 +1,8 @@
-# Run signed remote scripts
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser 
-# install scoop
-irm get.scoop.sh | iex
+if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+    Write-Host "Scoop not found. Installing..."
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+    irm get.scoop.sh | iex
+}  
+else {
+    Write-Host "Scoop is already installed."
+}

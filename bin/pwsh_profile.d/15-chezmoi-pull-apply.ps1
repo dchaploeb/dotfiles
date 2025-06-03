@@ -1,4 +1,6 @@
-cd ~/chezmoi
-git pull
-cd ~
-chezmoi apply
+if (-not $env:CHEZMOI) {
+    cd ~/chezmoi
+    git pull
+    cd ~
+    chezmoi apply
+}
