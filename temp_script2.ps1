@@ -1,4 +1,4 @@
-{{ if eq .chezmoi.os "windows" -}} # this doesn't work, so I'm essentially commenting it out
+# this doesn't work, so I'm essentially commenting it out
 # Ensure the module is installed and imported
 if (-not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client)) {
     try {
@@ -17,4 +17,4 @@ if (-not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client)) {
 
 # Import it if needed
 Import-Module Microsoft.WinGet.Client -ErrorAction SilentlyContinue
-{{ end }}
+

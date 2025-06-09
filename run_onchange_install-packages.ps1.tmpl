@@ -1,4 +1,4 @@
-{{ if eq .chezmoi.os "false" -}}  #this doesn't work, disabling
+{{ if eq .chezmoi.os "windows" -}}  
 {{ if .perl }}
 echo "Perl is enabled; installing packages:"
 sudo cpan {{ range .packages.all.cpan}}{{ . | quote }} {{ end}}
