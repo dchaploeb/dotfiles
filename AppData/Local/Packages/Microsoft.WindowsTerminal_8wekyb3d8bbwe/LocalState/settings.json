@@ -29,7 +29,7 @@
             "id": "User.copy.644BA8F2"
         }
     ],
-    "alwaysShowNotificationIcon": true,
+    "alwaysShowNotificationIcon": false,
     "autoHideWindow": false,
     "copyFormatting": "none",
     "copyOnSelect": true,
@@ -53,7 +53,7 @@
             "keys": "ctrl+c"
         }
     ],
-    "minimizeToNotificationArea": true,
+    "minimizeToNotificationArea": false,
     "newTabMenu": 
     [
         {
@@ -168,6 +168,31 @@
                 "hidden": false,
                 "name": "Git Bash",
                 "source": "Git"
+            },
+            {
+                "guid": "{23aefd69-d592-5b70-ade7-e5d80531d2ae}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{85a20109-76e0-5c78-a2a9-0fb0676d794e}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "commandline": "%LocalAppData%\\Programs\\nu\\bin\\nu.exe",
+                "guid": "{6947a832-9f58-4256-b971-ccdf4c8e3564}",
+                "hidden": false,
+                "icon": "C:\\Users\\237\\AppData\\Local\\resources\\nushell.sh.png",
+                "name": "Nushell"
+            },
+            {
+                "guid": "{47302f9c-1ac4-566c-aa3e-8cf29889d6ab}",
+                "hidden": false,
+                "name": "Nushell",
+                "source": "nu"
             }
         ]
     },
