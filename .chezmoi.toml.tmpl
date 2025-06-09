@@ -7,7 +7,7 @@
     osid = {{ $osid | quote }}
     perl = 0
 
-{{- if eq .gui 1 -}}
+{{- if .gui -}}
 [edit]
     command = "code"
     args = "--wait"
@@ -16,13 +16,13 @@
     command = "code"
     args = ["--wait", "--diff"]
 {{- end -}}
-{{- if eq.gui 0 -}}
+{{- if .gui -}}
 [edit]
     command = "nano"
 
 [diff]
     command = "diff"
-
+{{- end -}}
 [git]
     autoCommit = true
     autoPush = true
