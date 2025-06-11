@@ -12,7 +12,7 @@
 {{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
 {{- end -}}
 
-{{- if eq .chezmoi.hostname "burnham" "tonkee" -}}
+{{- if eq .chezmoi.hostname "BURNHAM" "TONKEE" -}}
 {{-    if eq $osid "windows" -}}
 {{-       $gui = true -}}
 {{-    end -}}
@@ -22,12 +22,13 @@
 
 [data]
     osid = {{ $osid | quote }}
-    gui = $gui
-    update = $update
-    install = $install
-    perl = $perl
+    gui = {{ $gui }}
+    update = {{ $update }}
+    install = {{ $install }}
+    perl = {{ $perl }}
+    hostname = {{ .chezmoi.hostname | quote }}
 
-{{- if $gui -}}
+{{ if $gui -}}
 [edit]
     command = "code"
     args = "--wait"
