@@ -1,7 +1,9 @@
 {{ if ne .chezmoi.os "windows" -}}
 #!/bin/sh
+{{ if .update }}
 
 # {{ now | date "2006-01-02" }}
 echo "Updating..."
 sudo apt update
+{{ end -}}
 {{ end -}}
