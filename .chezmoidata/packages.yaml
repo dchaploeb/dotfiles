@@ -1,6 +1,7 @@
 packages:
   windows:
     winget:
+    - '7zip.7zip'
     - 'Brave.Brave'
     - 'calibre.calibre'
     - 'dremin.RetroBar'
@@ -8,6 +9,7 @@ packages:
     - 'GitHub.cli'
     - 'HTTPToolKit.HTTPToolKit'
     - 'ImageMagick.ImageMagick'
+    - 'Insecure.Nmap'
     - 'Iterate.Cyberduck'
     - 'JanDeDobbeleer.OhMyPosh'
     - 'KeePassXCTeam.KeePassXC'
@@ -15,12 +17,16 @@ packages:
     - 'Microsoft.VisualStudioCode'
     - 'Microsoft.WSL'
     - 'Notepad++.Notepad++'
-    - 'Nushell.Nushell'
     - 'Obsidian.Obsidian'
+    - 'OpenJS.NodeJS.LTS'
     - 'OpenWhisperSystems.Signal'
+    - 'Oracle.MySQLWorkbench'
+    - 'Pinta.Pinta'
     - 'Proton.ProtonDrive'
-    - 'VideoLAN.VLC'
     - 'Rustlang.Rustup'
+    - 'SumatraPDF.SumatraPDF'
+    - 'VideoLAN.VLC'
+    - 'WiresharkFoundation.Wireshark'
   linux:
     apt:
     - 'zsh'
