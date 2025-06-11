@@ -1,13 +1,33 @@
+{{/* boolean feature tags */}}
+{{- $gui := false -}}       {{/* true if this machine is one where I typically 
+                                 log into a desktop environment */}}
+{{- $update := false -}}    {{/* true if chezmoi should run updates on this 
+                                 computer */}}
+{{- $install := false -}}   {{/* true if chezmoi should install software */}}
+{{- $perl := false -}}      {{/* true if chezmoi should install perl mods */}}
+{{- "" -}}
+
 {{- $osid := .chezmoi.os -}}
 {{- if hasKey .chezmoi.osRelease "id" -}}
 {{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
 {{- end -}}
 
+{{- if eq .chezmoi.hostname "burnham" "tonkee" -}}
+{{-    if eq $osid "windows" -}}
+{{-       $gui = true -}}
+{{-    end -}}
+{{-    $install = true -}}
+{{-    $update = true -}}
+{{- end -}}
+
 [data]
     osid = {{ $osid | quote }}
-    perl = 0
+    gui = $gui
+    update = $update
+    install = $install
+    perl = $perl
 
-{{- if .gui -}}
+{{- if $gui -}}
 [edit]
     command = "code"
     args = "--wait"
@@ -15,14 +35,14 @@
 [diff]
     command = "code"
     args = ["--wait", "--diff"]
-{{- end -}}
-{{- if .gui -}}
+{{- else -}}
 [edit]
     command = "nano"
 
 [diff]
     command = "diff"
-{{- end -}}
+{{- end}}
+
 [git]
     autoCommit = true
     autoPush = true

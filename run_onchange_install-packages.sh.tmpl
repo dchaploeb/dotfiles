@@ -1,4 +1,5 @@
 {{ if ne .chezmoi.os "windows" -}}
+{{ if .install }}
 #!/bin/bash
 
 echo "Non-windows environment..."
@@ -18,5 +19,6 @@ sudo apt install {{ range .packages.kali.apt}}{{ . | quote }} {{ end }}
 echo "Perl is enabled; installing packages:"
 sudo cpan {{ range .packages.all.cpan}}{{ . | quote }} {{ end }}
 sudo cpan -T {{ range .packages.all.cpanT}}{{ . | quote }} {{ end }}
+{{ end -}}
 {{ end -}}
 {{ end -}}

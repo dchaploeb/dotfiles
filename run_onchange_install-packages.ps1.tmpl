@@ -5,6 +5,7 @@ sudo cpan {{ range .packages.all.cpan}}{{ . | quote }} {{ end}}
 sudo cpan -T {{ range .packages.all.cpanT}}{{ . | quote }} {{ end }}
 {{ end -}}
 
+{{- if .install -}}
 # Step 1: List of package IDs we want to install
 $requestedPackageIds = @(
 {{- $last := sub (len .packages.windows.winget) 1 -}}
@@ -28,4 +29,5 @@ function Install-WingetIfMissing($id, $installedPackages) {
 foreach ($id in $requestedPackageIds) {
     Install-WingetIfMissing $id $installedPackages
 }
+{{ end -}}
 {{ end -}}
