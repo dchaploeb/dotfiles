@@ -1,9 +1,29 @@
 brave_apps:
-- name: Mnemo
-  url: https://chat.openai.com
-- name: Proton Mail
-  url: https://mail.proton.me
 - name: Google Calendar
   url: https://calendar.google.com
+  iconurl: https://images.icon-icons.com/2631/PNG/512/google_calendar_new_logo_icon_159141.png
+  profile: WW
+- name: Mnemo
+  url: https://chat.openai.com
+  profile: Personal
 - name: ClickUp
   url: https://app.clickup.com/
+  profile: WW
+- name: Proton Mail
+  url: https://mail.proton.me
+  profile: Personal
+- name: Google Chat
+  url: https://chat.google.com
+  profile: WW
+- name: WW Email
+  url: https://mail.google.com/
+  icondomain: https://weaversway.coop
+  profile: WW
+- name: WW Automate
+  url: https://weaversway.hostedrmm.com/automate
+  profile: WW
+  iconurl: https://weaversway.hostedrmm.com/automate/favicon.ico
+- name: Home Assistant
+  url: https://localhost:8123
+  profile: personal
+  icondomain: https://homeassistant.io
