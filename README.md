@@ -4,89 +4,11 @@
 Welcome to my dotfiles repo.  I use `chezmoi` to manage my home directory, 
 synchronize application settins, and install packages on my computers.
 
-# This Document
+# Setting up a new environment
 
-This is an early version of this document.  I am still developing this setup,
-and some of the things I want to do are not implemented yet or the
-implementation doesn't fully work properly.  I'm using this document to note 
-things about my workflow, some of which aren't automated by chezmoi.  And to 
-some degree, this document will mix things I have implemented with things I 
-have not, though I will try to be clear which are which.
-
-# My computing profile
-
-If you just want to know what I'm doing technically, skip this whole section. 
-It's biographical information and opinions about computer environments, which
-may serve to help explain some of WHY I'm doing certain things in `chezmoi`.
-Honestly you probably don't care and I should probably delete this section!
-
-I am an IT Professional.  I do some programming, but I also do other technical 
-work.  
-
-I do more command line work than the average non-technical user, and (as my use
-of chezmoi shows) I like reproducible, idempotent processes.  Windows System 
-Administration (which I also do) drives me crazy for this reason.  My command 
-line work includes spending a fair amount of time in `powershell` on windows 
-and `zsh` on Linux.  My Linux work is primarily in `wsl` development 
-environments (running on my Windows desktops) or remote servers that I connect 
-to using `ssh`.  
-
-I know people who pretty much use the CLI exclusively.  I use it a lot, but I 
-am also a dedicated and [opinionated](#start-menu-and-web-shortcuts-on-windows)
-user of GUIs.  Most of my work is done on Windows desktop computers, but I find 
-Windows 11 in its base setup basically unusable.  (If I have to use someone 
-else's Win11 computer for a few minutes without installing my whole setup, I
-*must* at least move the start menu to the left!)  I really
-like VSCode and Windows Terminal and use them extensively.  I think someone
-needs to rethink the whole idea of tabbed windows, but obviously they're what
-we've got for now.  (And don't get me wrong-- having them is better than not
-having them, and WAY better than the old Windows MDI paradigm).
-
-I have a strong bias towards open-source software, and these days MOST of my
-toolchain is Open Source. I do use some closed commercial software, most 
-notably Windows itself, Start11, and Obsidian.  And Excel.  
-
-I digress a bit, but it feels like it might be interesting to talk about my 
-use of closed-source software.
-
-I can't really defend my use of Windows except to say that I need it for work.
-I don't hate Windows-- in fact I enjoy using it, most of the time-- but I 
-don't trust it either.  I don't currently use MacOS or Linux GUIs much, but I
-have in the past and expect to do so again in the future-- as mentioned above,
-I use Linux regularly but not as a desktop environment.  My next home 
-computer will probably dual-boot Windows and Linux, although WSL makes it 
-less urgent to be able to do this.  One of the attractions of `chezmoi` for 
-me is the fact that it is cross-platform including Windows.  Many of the other
-programs in this space will run on anything you want as long as it's unix.
-
-[Start11 is discussed below](#start-menu-and-web-shortcuts-on-windows).
-
-[Obsidian](https://obsidian.md/)'s ecosystem FEELS so open source, it's easy to
-forget that the product itself is not.  But I feel comfortable that  Obsidian's
-business model is not abusive; and there's enough open-source tech underlying
-and exposed in Obsidian that I feel like the community could take over pretty
-easily if the company turned evil.
-
-And then there's Excel.  Closed-source Desktop applications from large
-companies are often pretty terrible-- I'm looking at you, Adobe-- but 
-spreadsheet software is an exception.  Excel and Google Sheets are both 
-really good products; they both get active feature development and leapfrog 
-each other in capabilities regularly.  It would be really nice if the open 
-source world had something nearly as good.  It does not.  Yes, I have tried
-LibreOffice. 
-
-# The goal (and today's reality)
-This section includes details of what I do when I'm setting up a new 
-environment, and the things I'd like to have happen.
-
-When I sign into a new computer or environment, I'd like to be able to 
-reproduce my preferred setup with a minimal number of steps.  
-
-Ideally those steps should pretty much be:
- 
-  1. Install a dependency or two (On many modern OSs, the prereqs--
-     git, ssh, and a package manager-- all already there. But in some
-     environments I may need to install some of these things)
+  1. Make sure the environment has git, ssh, and the appropriate package
+     manager.  In general these days this is already true in most of the
+     environments I use, but there are occasional exceptions.
 
   2. Make an ssh key-- `ssh-keygen`-- and upload it to github 
 
@@ -98,32 +20,39 @@ Ideally those steps should pretty much be:
      In Linux: 
      `sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:dchaploeb/dotfiles.git` 
 
-     or in powershell: `iex "&{$(irm 'https://get.chezmoi.io/ps1')} -- init --apply git@github.com:dchaploeb/dotfiles.git"` 
+     or in powershell:
+     `iex "&{$(irm 'https://get.chezmoi.io/ps1')} -- init --apply git@github.com:dchaploeb/dotfiles.git"` 
      (TODO: test this; it didn't work last time I tried it but I think I had 
      the quotes in the wrong place.  If it doesn't work, big whoop, install
      first and then init and apply.  What, you're only happy if it's a
      single line of code?)
  
-  4. In some cases, I may need to tweak a setting or two in 
-     `~/.config/chezmoi/chezmoi.toml`.  After doing this, I may need to 
-     run `chezmoi apply` again to install more packages.
+  4. Tweak settings in `~/.config/chezmoi/chezmoi.toml` to specify which
+     sets of packages `chezmoi` should install.  If anything was changed,
+     run `chezmoi apply` again to install them.
 
-     Right now, realistically, installing packages is a semi-manual process. 
-     Some of the packages get installed by running scripts which live in 
-     `bin/`.  I try not to install anything with a gui installer-- as noted, 
+  5. Install packages manually if needed.  Right now, some of the packages get 
+     installed by running scripts which live in `bin/` and some packages I use
+     regularly aren't supported by my `cheezmoi apply` workflow yet.  
+     I try not to install anything with a gui installer-- as noted, 
      I want reproducible processes, and downloading an installer and double
-     clicking on it is not that!  So I install using command-line package 
-     managers, and if I do that manually, I typically also add it to 
-     `packages.yaml` or a script.
+     clicking on it is not that!  So the goal is that this step eventually
+     doesn't exist.  (`syncthing` is currently a semi-manual setup)
 
-  5. After packages are installed, I need to sign into a few  other sync 
-     services and cloud storage services.  Today those services are Proton 
-     Drive, vscode sync, Obsidian sync, iCloud, and Google Drive.  It would be
-     nice if there were fewer of these.
+  6. Set up additional sync services.  There are too many of these.  I keep
+     trying to consolidate down but each service has benefits and limitations.
+     `syncthing` is a recent addition to this and may end up replacing some of
+     the cloud services.
+     1. syncthing
+     2. Proton Drive
+     3. vscode sync
+     4. Obsidian sync
+     5. iCloud
+     6. Google Drive.
+     7. OneDrive
 
-There is no step 6.  Everything I need is installed, my data is synced and configured the way I like it at this point.  Of course, the phrase "after 
-packages are installed" is doing a lot of work in this list, but it's a 
-much simpler setup than was needed in the past.
+That's it!  Everything I need is installed, my data is synced and configured the way I like it at this point.  
+Of course, steps 5 and 6 still involve some manual work, but it's a lot less than was needed in the past.
 
 # chezmoi workflow
 
@@ -135,22 +64,31 @@ in my home directory or changing settings that I want to keep synced, I run
 `chezmoi re-add`, which picks up the change, commits it, and pushes it to
 github.   
 
-`chezmoi re-add` turns out to be the command that makes `chezmoi` really a
+Editorial comment: `chezmoi re-add` turns out to be the command that makes 
+`chezmoi` really a
 time-saver for me.  When I read people complaining about `chezmoi` on the web,
 it's the process of editing files in the chezmoi directory rather than where
 they're being used that turns people off.  For the most part, you don't have 
 to do this.  Edit files that have been added to chezmoi in-place, then run
 `chezmoi re-add`.
 
-The one significant exception to the edit-in-place workflow, at least for me,
-is powershell's profile.  See [below](#dotfiles-profiles-and-preferences).
+For dotfiles, the exception to this is files generated by chezmoi templates.
+If you're using this feature, changing those files means editing the 
+templates in the chezmoi directory.  This is a tradeoff-- the template allows 
+me to maintain one file which modifies itself based on environment, but in 
+order to make  that work I have to edit the template rather than the real 
+file.  If a file needs this treatment, use `chezmoi add --template` to convert 
+it to a template.
+
+And of course, chezmoi scripts and config files live in the chezmoi
+directory and get edited there.
 
 For easy access to scripts and templates, I have chezmoi create a symlink at 
 `~/chezmoi` pointing to `~/.local/share/chezmoi`.  This allows me to easily 
 switch to the directory, or open it in vscode with `code chezmoi`
 
-If a file needs to be different on different machines, use `chezmoi 
-add --template` to convert it to a template.
+After editing stuff in the chezmoi directory, I still just run `chezmoi re-add`
+and that triggers chezmoi to commit and push my changes.
 
 I don't currently use chezmoi's password manager integration, though it looks
 pretty neat.
@@ -182,80 +120,77 @@ pretty neat.
 
 ## Package management
 
-This is the area that needs the most work.  If I needed EXACTLY the same
-in every environment, I really wouldn't need multiple environments so much.
-Plus scripts that install software often aren't idempotent, and often aren't
-fast, so you don't want it checking all of your software every time you're 
-just trying to get to work.  But getting the packages I need installed 
-quickly and efficiently is a big part of the point of this project, so I'm
-stil working on this.
-
  -  ✅ Install needed packages on linux
  -  ✅ Install zsh and set it to be my shell.
- -  TODO: Seperate some packages that are only needed for certain projects
- -  TODO: Finish winget package installation
- -  TODO: Fix powershell module installation
+ -  TODO: Finish winget package installation (this might be done)
+ -  TODO: Fix powershell module installation (this might be done)
  -  TODO: Move as many `bin/` install scripts as possible to actual scripts run 
     by `chezmoi`.
 
 ## Start Menus, bars, launchers, and Web Shortcuts (on Windows)
 
-I use retrobar to create a Windows XP style taskbar, and Start11 to create a 
-Windows 10 style Start menu.  This is great, and makes Windows usable for me.
-(If you hate the Windows XP taskbar and the Windows 10 start menu, that's
-cool.  For me, every taskbar after XP made me less productive, and while it 
-took me a while to get to the point where I was using Windows 10's start menu
-effectively, by the time Windows 11 came and took it away from me, I was 
-lost).
+ - ✅ Sync Retrobar theme and prefs
+ - ✅ Sync yasb theme and prefs
+ - ✅ Build and install Web shortcuts
+ - TODO: Window management tool prefs, once I have a stable configuration
 
-I also make pretty heavy use of Brave Browser's "application" shortcuts, which
+The web shortcuts feature is my favorite thing in here and deserves some comment:
+
+I make pretty heavy use of Brave Browser's "application" shortcuts, which
 install into the start menu.  (You could do something similar with any
 chromium-based browser).  But those "applications" aren't easily syncable 
 between computers, nor is there a simple way to script making the browser 
-create them.  So I'm working on an alternative.
+create them.  So I created an alternative.
 
 (It would be nice if my alternative worked in any desktop environment, but
 that's a distant TODO.  For now I'm constructing Windows shortcuts.)
 
-This is working now; the system will build shortcuts for me based on a dotfile
+This is working now; the system will build shortcuts for me based on a config file
 and put them in a start menu folder, updating them as needed.  Still some tweaks
 to this to come, but it's a working feature (and should be adaptable to any
 Chromium-based browser that supports application shortcuts).
 
-In theory the Start11 integration should be easy, but so far installing Start11
-settings from the command line hasn't been great.  I may rethink this whole 
-thing.
+# Wishlist and Works in Progress
 
-Start11 is a closed-source commercial product, so if I can find an open-source
-launcher that does more or less what I need, I'll consider switching.  It 
-doesn't need to look *exactly* like the Windows 10 start menu, but it needs to 
-have many of the same features.  So far all of the tools I can find either 
-don't really meet my needs (Open Shell, Cairo) or are commercial (Start11, 
-StartAllBack, Start Menu Reviver).  If you know of something else I should try,
-let me know! 
+This part of the file really isn't about dotfiles or this repository, it's
+about tools I want to find or set up.  If you know of anything that fills in
+these blanks, please let me know!
 
-Right now I'm fooling with `yasb` and I might build menus that go there.  
-That would do everything I need, but I'd miss my big colorful app icons.
-
- - ✅ Sync Retrobar theme and prefs
- - ✅ Build and install Web shortcuts
- - TODO: Start11 integration (or other launcher/start menu manager, if I can
-   find one that meets my needs.)
-
-## Window management on Windows
-
-I've been messing with various methods of window management on Windows. 
+ - WINDOWS LAUNCHER: Currently I use Start11 to create a 
+   Windows 10 style Start menu.  This is great, and makes Windows usable for me.
+   (If you hate the Windows 10 start menu, that's cool.  It took me a while to
+   warm up to it, but once I did, Windows 11's made me really sad in how
+   inflexible it is).  But it isn't really something that can be built in an
+   automated way, either with Windows or Start11, for a variety of reasons.  So
+   a config-based launcher is something I'd love to have.  Also
+   I have a strong preference for open source tools, especially UI stuff like this.  It 
+   doesn't need to look *exactly* like the Windows 10 start menu, but it needs to 
+   have many of the same features.  So far all of the tools I can find either 
+   don't really meet my needs (Open Shell, Cairo) or are commercial (Start11, 
+   StartAllBack, Start Menu Reviver).  If you know of something else I should try,
+   let me know! Right now I'm fooling with `yasb` and I might build menus that go there.  
+   That would do everything I need, but I'd miss my big colorful app icons.
+ - WINDOW MANAGER FOR WINDOWS: I've been messing with various methods of window management on Windows. 
 I've tried a bunch of window managers.  Right now I'm leaning towards 
 using the built-in Windows multi-desktop management, enhanced with `yasb` 
 for quick switching using the mouse and the FancyZones and Workspaces 
 Powertoys.  So
 you may see some of that in my dotfiles.  I've also been fooling with 
 `glazewm` a bit; I like the way it handles multiple monitors better than 
-most other window managers but it annoys me in other ways.
-
-Lastly, may I recommend `windows-terminal-quake`.  Contrary to the name,
+most other window managers but it annoys me in other ways. I also just found
+`windows-terminal-quake`.  Contrary to the name,
 it supports slide-out quake-style windows for more than just Windows 
-Terminal (in fact, I'm not using it for Windows Terminal!)
-
-Config for that is still being fooled with, so it's not checked in yet,
+Terminal (in fact, I'm not using it for Windows Terminal!) Config for that is still being fooled with, so it's not checked in yet,
 but it will be here soon.
+- I use Obsidian, but its licensing model bugs me.  There's nothing else quite
+  like it out there, but I keep my eyes open.  (I have enough in Obsidian now
+  that dealing with a large collection of markdown-based files is a feature
+  requirement).
+- A good FOSS spreadsheet.  Closed-source Desktop applications from large
+companies are often pretty terrible-- I'm looking at you, Adobe-- but 
+spreadsheet software is an exception.  Excel and Google Sheets are both 
+really good products; they both get active feature development and leapfrog 
+each other in capabilities regularly.  It would be really nice if the open 
+source world had something nearly as good.  It does not.  Yes, I have tried
+LibreOffice. Repeatedly.  For years.
+
