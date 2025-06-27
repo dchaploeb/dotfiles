@@ -12,6 +12,7 @@ bin/pwsh_profile.d
 {{ if eq .chezmoi.os "windows" }}
 .bashrc
 .bash_logout
+.config/yasb/yasb.log
 .zshrc
 .profile
 {{ end }}

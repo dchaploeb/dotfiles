@@ -1,0 +1,1033 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "WtqOptions",
+  "type": "object",
+  "description": "Defines WTQ-wide options, including the list of configured apps.",
+  "additionalProperties": false,
+  "properties": {
+    "AttachMode": {
+      "title": "Attach mode",
+      "description": "How WTQ should get to an instance of a running app.\nI.e. whether to start an app instance if one cannot be found.",
+      "default": "FindOrStart",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/AttachMode"
+        }
+      ]
+    },
+    "AlwaysOnTop": {
+      "title": "Always on top",
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Whether the app should always be on top of other windows, regardless of whether it has focus.",
+      "default": false
+    },
+    "HideOnFocusLost": {
+      "title": "Hide on focus lost",
+      "description": "Whether the app should be toggled off when another app gets focus.",
+      "default": "Always",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/HideOnFocusLost"
+        }
+      ]
+    },
+    "TaskbarIconVisibility": {
+      "title": "Taskbar icon visibility",
+      "description": "When to show the app window icon on the taskbar.",
+      "default": "AlwaysHidden",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/TaskbarIconVisibility"
+        }
+      ]
+    },
+    "Opacity": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Make the window see-through (applies to the entire window, including the title bar).\n0 (invisible) - 100 (opaque).",
+      "format": "int32",
+      "default": 100
+    },
+    "HorizontalScreenCoverage": {
+      "title": "Horizontal screen coverage",
+      "type": [
+        "null",
+        "number"
+      ],
+      "description": "Horizontal screen coverage, as a percentage.",
+      "format": "float",
+      "default": 95.0
+    },
+    "HorizontalAlign": {
+      "title": "Horizontal align",
+      "description": "Where to position an app on the chosen monitor, horizontally.",
+      "default": "Center",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/HorizontalAlign"
+        }
+      ]
+    },
+    "VerticalScreenCoverage": {
+      "title": "Vertical screen coverage",
+      "type": [
+        "null",
+        "number"
+      ],
+      "description": "Vertical screen coverage as a percentage (0-100).",
+      "format": "float",
+      "default": 95.0
+    },
+    "VerticalOffset": {
+      "title": "Vertical offset",
+      "type": [
+        "null",
+        "number"
+      ],
+      "description": "How much room to leave between the top of the app window and the top of the screen, in pixels.",
+      "format": "float",
+      "default": 0.0,
+      "maximum": 1000.0,
+      "minimum": 0.0
+    },
+    "OffScreenLocations": {
+      "title": "Off-screen locations",
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "When moving an app off the screen, WTQ looks for an empty space to move the window to.\nDepending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.\nBy default, WTQ looks for empty space in this order: Above, Below, Left, Right.",
+      "items": {
+        "$ref": "#/definitions/OffScreenLocation"
+      }
+    },
+    "PreferMonitor": {
+      "title": "Prefer monitor",
+      "description": "Which monitor to preferably drop the app.",
+      "default": "WithCursor",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/PreferMonitor"
+        }
+      ]
+    },
+    "MonitorIndex": {
+      "title": "Monitor index",
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "If PreferMonitor is set to AtIndex, this setting determines what monitor to choose.\nZero based, e.g. 0, 1, etc.",
+      "format": "int32",
+      "default": 0,
+      "maximum": 10.0,
+      "minimum": 0.0
+    },
+    "AnimationDurationMs": {
+      "title": "Animation duration",
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "How long the animation should take, in milliseconds.",
+      "format": "int32",
+      "default": 250,
+      "maximum": 1000.0,
+      "minimum": 0.0
+    },
+    "AnimationTypeToggleOn": {
+      "title": "Animation type (toggle ON)",
+      "description": "The animation type to use when toggling on an application.",
+      "default": "EaseOutQuart",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/AnimationType"
+        }
+      ]
+    },
+    "AnimationTypeToggleOff": {
+      "title": "Animation type (toggle OFF)",
+      "description": "The animation type to use when toggling off an application.",
+      "default": "EaseInQuart",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/AnimationType"
+        }
+      ]
+    },
+    "$schema": {
+      "type": "string",
+      "description": "Path to wtq.schema.json."
+    },
+    "Apps": {
+      "type": "array",
+      "description": "Applications to enable Quake-style dropdown for.",
+      "items": {
+        "$ref": "#/definitions/WtqAppOptions"
+      }
+    },
+    "Hotkeys": {
+      "type": "array",
+      "description": "Global hotkeys, that toggle either the first, or the most recently toggled app.",
+      "items": {
+        "$ref": "#/definitions/HotkeyOptions"
+      }
+    },
+    "ShowUiOnStart": {
+      "title": "Show UI on start",
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Whether to show the GUI when WTQ is started.",
+      "default": false
+    },
+    "AnimationTargetFps": {
+      "title": "Animation target FPS",
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "How many frames per second the animation should be.\nNote that this may not be hit if moving windows takes too long, hence \"target\" fps.\nMust be between 5 and 120, to prevent issues that can arise with values that are too low or too high.",
+      "format": "int32",
+      "default": 40,
+      "maximum": 120.0,
+      "minimum": 5.0
+    }
+  },
+  "definitions": {
+    "AttachMode": {
+      "type": "string",
+      "description": "How WTQ should try to attach to an app.",
+      "x-enumNames": [
+        "None",
+        "Find",
+        "FindOrStart",
+        "Manual"
+      ],
+      "enum": [
+        "None",
+        "Find",
+        "FindOrStart",
+        "Manual"
+      ]
+    },
+    "HideOnFocusLost": {
+      "type": "string",
+      "description": "Whether to toggle off an app when focus moves to another app.",
+      "x-enumNames": [
+        "None",
+        "Always",
+        "Never",
+        "UnlessFocusChangedScreen",
+        "True",
+        "False"
+      ],
+      "enum": [
+        "None",
+        "Always",
+        "Never",
+        "UnlessFocusChangedScreen",
+        "True",
+        "False"
+      ]
+    },
+    "TaskbarIconVisibility": {
+      "type": "string",
+      "description": "Determines the visibility of the app's taskbar icon.",
+      "x-enumNames": [
+        "None",
+        "AlwaysHidden",
+        "AlwaysVisible",
+        "WhenAppVisible"
+      ],
+      "enum": [
+        "None",
+        "AlwaysHidden",
+        "AlwaysVisible",
+        "WhenAppVisible"
+      ]
+    },
+    "HorizontalAlign": {
+      "type": "string",
+      "description": "Determines where to place an app window on the screen, horizontally.",
+      "x-enumNames": [
+        "Center",
+        "Left",
+        "Right"
+      ],
+      "enum": [
+        "Center",
+        "Left",
+        "Right"
+      ]
+    },
+    "OffScreenLocation": {
+      "type": "string",
+      "description": "Where app windows should be moved to- and from, relative to the preferred screen.",
+      "x-enumNames": [
+        "None",
+        "Above",
+        "Below",
+        "Left",
+        "Right"
+      ],
+      "enum": [
+        "None",
+        "Above",
+        "Below",
+        "Left",
+        "Right"
+      ]
+    },
+    "PreferMonitor": {
+      "type": "string",
+      "description": "What monitor an app should be toggle on.",
+      "x-enumNames": [
+        "WithCursor",
+        "AtIndex",
+        "Primary"
+      ],
+      "enum": [
+        "WithCursor",
+        "AtIndex",
+        "Primary"
+      ]
+    },
+    "AnimationType": {
+      "type": "string",
+      "description": "See here for more information: https://easings.net/.",
+      "x-enumNames": [
+        "Linear",
+        "EaseInOutSine",
+        "EaseInBack",
+        "EaseInCubic",
+        "EaseInQuart",
+        "EaseOutBack",
+        "EaseOutCubic",
+        "EaseOutQuart"
+      ],
+      "enum": [
+        "Linear",
+        "EaseInOutSine",
+        "EaseInBack",
+        "EaseInCubic",
+        "EaseInQuart",
+        "EaseOutBack",
+        "EaseOutCubic",
+        "EaseOutQuart"
+      ]
+    },
+    "WtqAppOptions": {
+      "type": "object",
+      "description": "Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).",
+      "additionalProperties": false,
+      "required": [
+        "Name",
+        "FileName"
+      ],
+      "properties": {
+        "AttachMode": {
+          "title": "Attach mode",
+          "description": "How WTQ should get to an instance of a running app.\nI.e. whether to start an app instance if one cannot be found.",
+          "default": "FindOrStart",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/AttachMode"
+            }
+          ]
+        },
+        "AlwaysOnTop": {
+          "title": "Always on top",
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether the app should always be on top of other windows, regardless of whether it has focus.",
+          "default": false
+        },
+        "HideOnFocusLost": {
+          "title": "Hide on focus lost",
+          "description": "Whether the app should be toggled off when another app gets focus.",
+          "default": "Always",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/HideOnFocusLost"
+            }
+          ]
+        },
+        "TaskbarIconVisibility": {
+          "title": "Taskbar icon visibility",
+          "description": "When to show the app window icon on the taskbar.",
+          "default": "AlwaysHidden",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/TaskbarIconVisibility"
+            }
+          ]
+        },
+        "Opacity": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Make the window see-through (applies to the entire window, including the title bar).\n0 (invisible) - 100 (opaque).",
+          "format": "int32",
+          "default": 100
+        },
+        "HorizontalScreenCoverage": {
+          "title": "Horizontal screen coverage",
+          "type": [
+            "null",
+            "number"
+          ],
+          "description": "Horizontal screen coverage, as a percentage.",
+          "format": "float",
+          "default": 95.0
+        },
+        "HorizontalAlign": {
+          "title": "Horizontal align",
+          "description": "Where to position an app on the chosen monitor, horizontally.",
+          "default": "Center",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/HorizontalAlign"
+            }
+          ]
+        },
+        "VerticalScreenCoverage": {
+          "title": "Vertical screen coverage",
+          "type": [
+            "null",
+            "number"
+          ],
+          "description": "Vertical screen coverage as a percentage (0-100).",
+          "format": "float",
+          "default": 95.0
+        },
+        "VerticalOffset": {
+          "title": "Vertical offset",
+          "type": [
+            "null",
+            "number"
+          ],
+          "description": "How much room to leave between the top of the app window and the top of the screen, in pixels.",
+          "format": "float",
+          "default": 0.0,
+          "maximum": 1000.0,
+          "minimum": 0.0
+        },
+        "OffScreenLocations": {
+          "title": "Off-screen locations",
+          "type": [
+            "array",
+            "null"
+          ],
+          "description": "When moving an app off the screen, WTQ looks for an empty space to move the window to.\nDepending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.\nBy default, WTQ looks for empty space in this order: Above, Below, Left, Right.",
+          "items": {
+            "$ref": "#/definitions/OffScreenLocation"
+          }
+        },
+        "PreferMonitor": {
+          "title": "Prefer monitor",
+          "description": "Which monitor to preferably drop the app.",
+          "default": "WithCursor",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/PreferMonitor"
+            }
+          ]
+        },
+        "MonitorIndex": {
+          "title": "Monitor index",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "If PreferMonitor is set to AtIndex, this setting determines what monitor to choose.\nZero based, e.g. 0, 1, etc.",
+          "format": "int32",
+          "default": 0,
+          "maximum": 10.0,
+          "minimum": 0.0
+        },
+        "AnimationDurationMs": {
+          "title": "Animation duration",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "How long the animation should take, in milliseconds.",
+          "format": "int32",
+          "default": 250,
+          "maximum": 1000.0,
+          "minimum": 0.0
+        },
+        "AnimationTypeToggleOn": {
+          "title": "Animation type (toggle ON)",
+          "description": "The animation type to use when toggling on an application.",
+          "default": "EaseOutQuart",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/AnimationType"
+            }
+          ]
+        },
+        "AnimationTypeToggleOff": {
+          "title": "Animation type (toggle OFF)",
+          "description": "The animation type to use when toggling off an application.",
+          "default": "EaseInQuart",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/AnimationType"
+            }
+          ]
+        },
+        "Name": {
+          "type": "string",
+          "description": "A logical name for the app, used to identify it across config reloads.\nAppears in logs.",
+          "minLength": 1
+        },
+        "Hotkeys": {
+          "type": "array",
+          "description": "One or more keyboard shortcuts that toggle in- and out this particular app.",
+          "items": {
+            "$ref": "#/definitions/HotkeyOptions"
+          }
+        },
+        "FileName": {
+          "title": "Filename",
+          "type": "string",
+          "description": "The filename to use when starting a new process for the app.\nE.g. notepad, dolphin, etc.",
+          "minLength": 1
+        },
+        "ProcessName": {
+          "title": "Process name",
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Apps sometimes have process names different from their filenames.\nThis field can be used to look for the process name in such cases. Windows Terminal is an\nexample, with filename wt, and process name WindowsTerminal."
+        },
+        "Arguments": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Command-line arguments that should be passed to the app when it's started.\nNote that this only applies when using an AttachMode that starts the app."
+        },
+        "ArgumentList": {
+          "title": "Argument list",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProcessArgument"
+          }
+        },
+        "WindowTitle": {
+          "title": "Window title",
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "WindowTitleOverride": {
+          "title": "Window title override",
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Attempt to set the window title to a specific value."
+        }
+      }
+    },
+    "HotkeyOptions": {
+      "type": "object",
+      "description": "Defines a combination of a Keys value, with optional KeyModifiers, used for mapping a shortcut to an action.",
+      "additionalProperties": false,
+      "properties": {
+        "Key": {
+          "$ref": "#/definitions/Keys"
+        },
+        "Modifiers": {
+          "$ref": "#/definitions/KeyModifiers"
+        }
+      }
+    },
+    "Keys": {
+      "type": "string",
+      "description": "",
+      "x-enumFlags": true,
+      "x-enumNames": [
+        "None",
+        "LButton",
+        "RButton",
+        "Cancel",
+        "MButton",
+        "XButton1",
+        "XButton2",
+        "Back",
+        "Tab",
+        "LineFeed",
+        "Clear",
+        "Return",
+        "Enter",
+        "ShiftKey",
+        "ControlKey",
+        "Menu",
+        "Pause",
+        "CapsLock",
+        "Capital",
+        "HangulMode",
+        "HanguelMode",
+        "KanaMode",
+        "JunjaMode",
+        "FinalMode",
+        "HanjaMode",
+        "KanjiMode",
+        "Escape",
+        "IMEConvert",
+        "IMENonconvert",
+        "IMEAccept",
+        "IMEAceept",
+        "IMEModeChange",
+        "Space",
+        "Prior",
+        "PageUp",
+        "PageDown",
+        "Next",
+        "End",
+        "Home",
+        "Left",
+        "Up",
+        "Right",
+        "Down",
+        "Select",
+        "Print",
+        "Execute",
+        "Snapshot",
+        "PrintScreen",
+        "Insert",
+        "Delete",
+        "Help",
+        "D0",
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8",
+        "D9",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
+        "LWin",
+        "RWin",
+        "Apps",
+        "Sleep",
+        "NumPad0",
+        "NumPad1",
+        "NumPad2",
+        "NumPad3",
+        "NumPad4",
+        "NumPad5",
+        "NumPad6",
+        "NumPad7",
+        "NumPad8",
+        "NumPad9",
+        "Multiply",
+        "Add",
+        "Separator",
+        "Subtract",
+        "Decimal",
+        "Divide",
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F11",
+        "F12",
+        "F13",
+        "F14",
+        "F15",
+        "F16",
+        "F17",
+        "F18",
+        "F19",
+        "F20",
+        "F21",
+        "F22",
+        "F23",
+        "F24",
+        "NumLock",
+        "Scroll",
+        "LShiftKey",
+        "RShiftKey",
+        "LControlKey",
+        "RControlKey",
+        "LMenu",
+        "RMenu",
+        "BrowserBack",
+        "BrowserForward",
+        "BrowserRefresh",
+        "BrowserStop",
+        "BrowserSearch",
+        "BrowserFavorites",
+        "BrowserHome",
+        "VolumeMute",
+        "VolumeDown",
+        "VolumeUp",
+        "MediaNextTrack",
+        "MediaPreviousTrack",
+        "MediaStop",
+        "MediaPlayPause",
+        "LaunchMail",
+        "SelectMedia",
+        "LaunchApplication1",
+        "LaunchApplication2",
+        "Oem1",
+        "OemSemicolon",
+        "Oemplus",
+        "Oemcomma",
+        "OemMinus",
+        "OemPeriod",
+        "OemQuestion",
+        "Oem2",
+        "Oem3",
+        "Oemtilde",
+        "OemOpenBrackets",
+        "Oem4",
+        "Oem5",
+        "OemPipe",
+        "OemCloseBrackets",
+        "Oem6",
+        "Oem7",
+        "OemQuotes",
+        "Oem8",
+        "OemBackslash",
+        "Oem102",
+        "ProcessKey",
+        "Packet",
+        "Attn",
+        "Crsel",
+        "Exsel",
+        "EraseEof",
+        "Play",
+        "Zoom",
+        "NoName",
+        "Pa1",
+        "OemClear",
+        "KeyCode",
+        "Shift",
+        "Control",
+        "Alt",
+        "Modifiers"
+      ],
+      "enum": [
+        "None",
+        "LButton",
+        "RButton",
+        "Cancel",
+        "MButton",
+        "XButton1",
+        "XButton2",
+        "Back",
+        "Tab",
+        "LineFeed",
+        "Clear",
+        "Return",
+        "Return",
+        "ShiftKey",
+        "ControlKey",
+        "Menu",
+        "Pause",
+        "CapsLock",
+        "CapsLock",
+        "HangulMode",
+        "HangulMode",
+        "HangulMode",
+        "JunjaMode",
+        "FinalMode",
+        "HanjaMode",
+        "HanjaMode",
+        "Escape",
+        "IMEConvert",
+        "IMENonconvert",
+        "IMEAccept",
+        "IMEAccept",
+        "IMEModeChange",
+        "Space",
+        "Prior",
+        "Prior",
+        "PageDown",
+        "PageDown",
+        "End",
+        "Home",
+        "Left",
+        "Up",
+        "Right",
+        "Down",
+        "Select",
+        "Print",
+        "Execute",
+        "Snapshot",
+        "Snapshot",
+        "Insert",
+        "Delete",
+        "Help",
+        "D0",
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8",
+        "D9",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
+        "LWin",
+        "RWin",
+        "Apps",
+        "Sleep",
+        "NumPad0",
+        "NumPad1",
+        "NumPad2",
+        "NumPad3",
+        "NumPad4",
+        "NumPad5",
+        "NumPad6",
+        "NumPad7",
+        "NumPad8",
+        "NumPad9",
+        "Multiply",
+        "Add",
+        "Separator",
+        "Subtract",
+        "Decimal",
+        "Divide",
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F11",
+        "F12",
+        "F13",
+        "F14",
+        "F15",
+        "F16",
+        "F17",
+        "F18",
+        "F19",
+        "F20",
+        "F21",
+        "F22",
+        "F23",
+        "F24",
+        "NumLock",
+        "Scroll",
+        "LShiftKey",
+        "RShiftKey",
+        "LControlKey",
+        "RControlKey",
+        "LMenu",
+        "RMenu",
+        "BrowserBack",
+        "BrowserForward",
+        "BrowserRefresh",
+        "BrowserStop",
+        "BrowserSearch",
+        "BrowserFavorites",
+        "BrowserHome",
+        "VolumeMute",
+        "VolumeDown",
+        "VolumeUp",
+        "MediaNextTrack",
+        "MediaPreviousTrack",
+        "MediaStop",
+        "MediaPlayPause",
+        "LaunchMail",
+        "SelectMedia",
+        "LaunchApplication1",
+        "LaunchApplication2",
+        "Oem1",
+        "Oem1",
+        "Oemplus",
+        "Oemcomma",
+        "OemMinus",
+        "OemPeriod",
+        "OemQuestion",
+        "OemQuestion",
+        "Oem3",
+        "Oem3",
+        "OemOpenBrackets",
+        "OemOpenBrackets",
+        "Oem5",
+        "Oem5",
+        "OemCloseBrackets",
+        "OemCloseBrackets",
+        "Oem7",
+        "Oem7",
+        "Oem8",
+        "OemBackslash",
+        "OemBackslash",
+        "ProcessKey",
+        "Packet",
+        "Attn",
+        "Crsel",
+        "Exsel",
+        "EraseEof",
+        "Play",
+        "Zoom",
+        "NoName",
+        "Pa1",
+        "OemClear",
+        "KeyCode",
+        "Shift",
+        "Control",
+        "Alt",
+        "Modifiers"
+      ]
+    },
+    "KeyModifiers": {
+      "type": "string",
+      "description": "Alt, control, etc..",
+      "x-enumFlags": true,
+      "x-enumNames": [
+        "None",
+        "Alt",
+        "Control",
+        "Shift",
+        "Super",
+        "NoRepeat"
+      ],
+      "enum": [
+        "None",
+        "Alt",
+        "Control",
+        "Shift",
+        "Super",
+        "NoRepeat"
+      ]
+    },
+    "ProcessArgument": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Argument": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    }
+  }
+}
