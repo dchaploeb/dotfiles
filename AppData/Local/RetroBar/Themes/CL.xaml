@@ -44,7 +44,7 @@
 <SolidColorBrush x:Key="ToolTipForeground" Color="#d9d9d9" />
 
 
-    <FontFamily x:Key="GlobalFontFamily">Futura</FontFamily>
+    <FontFamily x:Key="GlobalFontFamily">Segoe UI Emoji</FontFamily>
 
     <Style TargetType="ContentControl"
            x:Key="Taskbar"
