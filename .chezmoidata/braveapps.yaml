@@ -27,3 +27,7 @@ brave_apps:
   url: https://localhost:8123
   profile: personal
   icondomain: https://homeassistant.io
+- name: Syncthing
+  url: http://localhost:8384/
+  profile: personal
+  icondomain: https://syncthing.net
