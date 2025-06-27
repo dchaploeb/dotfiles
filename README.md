@@ -198,9 +198,10 @@ stil working on this.
  -  TODO: Move as many `bin/` install scripts as possible to actual scripts run 
     by `chezmoi`.
 
-## Start Menu and Web Shortcuts (on Windows)
+## Start Menus, bars, launchers, and Web Shortcuts (on Windows)
 
-I use retrobar to create a Windows XP style taskbar, and Start11 to create a Windows 10 style Start menu.  This is great, and makes Windows usable for me.
+I use retrobar to create a Windows XP style taskbar, and Start11 to create a 
+Windows 10 style Start menu.  This is great, and makes Windows usable for me.
 (If you hate the Windows XP taskbar and the Windows 10 start menu, that's
 cool.  For me, every taskbar after XP made me less productive, and while it 
 took me a while to get to the point where I was using Windows 10's start menu
@@ -216,20 +217,45 @@ create them.  So I'm working on an alternative.
 (It would be nice if my alternative worked in any desktop environment, but
 that's a distant TODO.  For now I'm constructing Windows shortcuts.)
 
-In theory the Start11 integration should be easy, but it's one of those 
-things that I haven't tried yet because it's a little scary-- Start11 settings 
-are stored in the registry, and my manually-created start menus on most of 
-my computers are more-or-less how I want them, so I'm reluctant to potentially
-hose them.
+This is working now; the system will build shortcuts for me based on a dotfile
+and put them in a start menu folder, updating them as needed.  Still some tweaks
+to this to come, but it's a working feature (and should be adaptable to any
+Chromium-based browser that supports application shortcuts).
+
+In theory the Start11 integration should be easy, but so far installing Start11
+settings from the command line hasn't been great.  I may rethink this whole 
+thing.
 
 Start11 is a closed-source commercial product, so if I can find an open-source
 launcher that does more or less what I need, I'll consider switching.  It 
-doesn't need to look *exactly* like the Windows 10 start menu, but it needs to have many of the same features.  So far all of the tools I can find either 
+doesn't need to look *exactly* like the Windows 10 start menu, but it needs to 
+have many of the same features.  So far all of the tools I can find either 
 don't really meet my needs (Open Shell, Cairo) or are commercial (Start11, 
 StartAllBack, Start Menu Reviver).  If you know of something else I should try,
-let me know!
+let me know! 
+
+Right now I'm fooling with `yasb` and I might build menus that go there.  
+That would do everything I need, but I'd miss my big colorful app icons.
 
  - ✅ Sync Retrobar theme and prefs
- - TODO: Build and install Web shortcuts
- - TODO: Start11 integration (or other start menu manager, if I can find one 
-   that meets my needs.)  
+ - ✅ Build and install Web shortcuts
+ - TODO: Start11 integration (or other launcher/start menu manager, if I can
+   find one that meets my needs.)
+
+## Window management on Windows
+
+I've been messing with various methods of window management on Windows. 
+I've tried a bunch of window managers.  Right now I'm leaning towards 
+using the built-in Windows multi-desktop management, enhanced with `yasb` 
+for quick switching using the mouse and the FancyZones and Workspaces 
+Powertoys.  So
+you may see some of that in my dotfiles.  I've also been fooling with 
+`glazewm` a bit; I like the way it handles multiple monitors better than 
+most other window managers but it annoys me in other ways.
+
+Lastly, may I recommend `windows-terminal-quake`.  Contrary to the name,
+it supports slide-out quake-style windows for more than just Windows 
+Terminal (in fact, I'm not using it for Windows Terminal!)
+
+Config for that is still being fooled with, so it's not checked in yet,
+but it will be here soon.
