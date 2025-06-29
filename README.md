@@ -1,8 +1,11 @@
-
-# dotfiles
+# dchaploeb's dotfiles
 
 Welcome to my dotfiles repo.  I use `chezmoi` to manage my home directory,
-synchronize application settins, and install packages on my computers.
+synchronize application settings, and install packages on my computers. 
+The goals here is to make setting up environments fast, easy, reproducible, 
+and idempotent; to keep setups consistent between multiple environments 
+whenever possible, and to facilitate a computing environment that is
+efficient for how I work!
 
 This readme is both an explanation for others of some of what I've set up in
 this repo, and a reminder for me of how to use it!
@@ -26,8 +29,8 @@ this repo, and a reminder for me of how to use it!
      or in powershell:
      `iex "&{$(irm 'https://get.chezmoi.io/ps1')} -- init --apply git@github.com:dchaploeb/dotfiles.git"`
      (TODO: test this; it didn't work last time I tried it but I think I had
-     the quotes in the wrong place.  If it doesn't work, big whoop, install
-     first and then init and apply.  What, you're only happy if it's a
+     the quotes in the wrong place.  If it doesn't work
+
      single line of code?)
 
   4. Tweak settings in `.chezmoi.toml.tmpl` to specify which
