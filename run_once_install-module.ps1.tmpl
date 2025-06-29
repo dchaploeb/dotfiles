@@ -1,4 +1,4 @@
-{{ if eq .chezmoi.os "windows" -}} # this doesn't work, so I'm essentially commenting it out
+{{ if eq .chezmoi.os "windows" -}}
 # Ensure the module is installed and imported
 if (-not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client)) {
     try {

@@ -1,10 +1,10 @@
 # dchaploeb's dotfiles
 
 Welcome to my dotfiles repo.  I use `chezmoi` to manage my home directory,
-synchronize application settings, and install packages on my computers. 
-The goals here is to make setting up environments fast, easy, reproducible, 
-and idempotent; to keep setups consistent between multiple environments 
-whenever possible, and to facilitate a computing environment that is
+synchronize application settings, and install packages on my computers.
+The goals here is to make setting up environments fast, easy, reproducible,
+and idempotent; to keep setups consistent between multiple environments
+whenever possible; and to facilitate a computing environment that is
 efficient for how I work!
 
 This readme is both an explanation for others of some of what I've set up in
@@ -29,11 +29,10 @@ this repo, and a reminder for me of how to use it!
      or in powershell:
      `iex "&{$(irm 'https://get.chezmoi.io/ps1')} -- init --apply git@github.com:dchaploeb/dotfiles.git"`
      (TODO: test this; it didn't work last time I tried it but I think I had
-     the quotes in the wrong place.  If it doesn't work
+     the quotes in the wrong place.)
 
-     single line of code?)
-
-  4. Tweak settings in `.chezmoi.toml.tmpl` to specify which
+  4. For some environments, we may be done!  But if we want applications
+     installed, tweak settings in `.chezmoi.toml.tmpl` to specify which
      sets of packages `chezmoi` should install.  If anything was changed,
      run `chezmoi apply` again to install them.
 
@@ -163,50 +162,3 @@ This is working now; the system will build shortcuts for me based on a config
 file and put them in a start menu folder, updating them as needed.  Still some
 tweaks to this to come, but it's a working feature (and should be adaptable to
 any Chromium-based browser that supports application shortcuts).
-
-## Wishlist and Works in Progress
-
-This part of the file really isn't about dotfiles or this repository, it's
-about tools I want to find or set up.  If you know of anything that fills in
-these blanks, please let me know!
-
-- **FOSS Start Menu Replacement for Windows**: Currently I use Start11 to
-   create a Windows 10 style Start menu.  This is great, and makes Windows 11
-   usable for me. (If you hate the Windows 10 start menu, that's cool.  
-   It took me a while to
-   warm up to it, but once I did, Windows 11's made me really sad in how
-   inflexible it is).  But it isn't really something that can be built in an
-   automated way, either with Windows 10 or Start11, for a variety of reasons.  
-   So a config-based launcher is something I'd love to have.  Also
-   I have a strong preference for open source tools, especially UI stuff like
-   this.  It doesn't need to look *exactly* like the Windows 10 start menu, but
-   it needs to have many of the same features.  So far all of the tools I can
-   find either don't really meet my needs (Open Shell, Cairo) or are commercial
-   (Start11, StartAllBack, Start Menu Reviver).  If you know of something else
-   I should try, let me know! Right now I'm fooling with `yasb` and I might
-   build menus that go there.  That would do everything I need, but I'd miss
-   my big colorful app icons.
-- **FOSS Window Manager for Windows**: I've been messing with various methods
-   of window management on Windows. I've tried a bunch of window managers.  
-   Right now I'm leaning towards using the built-in Windows multi-desktop
-   management, (ie the "Task View") enhanced with `yasb` for quick switching
-   using the mouse, and the FancyZones and Workspaces Powertoys.  So
-   you may see some of that in my dotfiles.  I've also been fooling with
-   `glazewm` a bit; I like the way it handles multiple monitors better than
-   most other window managers but it annoys me in other ways. I also just found
-   `windows-terminal-quake`.  Contrary to the name,
-   wtq supports slide-out quake-style windows for more than just Windows
-   Terminal (in fact, I'm not using it for Windows Terminal!) Config for that
-   is still being fooled with, so it's not checked in yet, but it will be here
-   soon.
-- **FOSS Markdown-based note software** I use Obsidian, but its licensing
-   model bugs me.  There's nothing else quite like it out there, but I keep my
-   eyes open.  (I have enough in Obsidian now that dealing with a large
-   collection of markdown-based files is a feature requirement).
-- **A good FOSS spreadsheet**  Closed-source Desktop applications from large
-   companies are often pretty terrible-- I'm looking at you, Adobe-- but
-   spreadsheet software is an exception.  Excel and Google Sheets are both
-   really good products; they both get active feature development and leapfrog
-   each other in capabilities regularly.  It would be really nice if the open
-   source world had something nearly as good.  It does not.  Yes, I have tried
-   LibreOffice. Repeatedly.  For years.
