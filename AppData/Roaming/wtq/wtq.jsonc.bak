@@ -1,0 +1,78 @@
+{
+	"$schema": "wtq.schema.json",
+	"Apps": [
+		{
+			"Name": "KeePassXC",
+			"Hotkeys": [
+				{
+					"Key": "K",
+					"Modifiers": "Alt, Control"
+				}
+			],
+			"FileName": "keepassxc",
+			"AlwaysOnTop": true,
+			"HorizontalScreenCoverage": 75,
+			"HorizontalAlign": "Left",
+			"VerticalScreenCoverage": 75
+		},
+		{
+			"Name": "Windows Terminal",
+			"Hotkeys": [
+				{
+					"Key": "T",
+					"Modifiers": "Alt, Control"
+				}
+			],
+			"FileName": "wt",
+			"ProcessName": "WindowsTerminal",
+			"Opacity": 95,
+			"HorizontalScreenCoverage": 100,
+			"VerticalScreenCoverage": 100
+		},
+		{
+			"Name": "Google Calendar",
+			"Hotkeys": [
+				{
+					"Key": "C",
+					"Modifiers": "Alt, Control"
+				}
+			],
+			"FileName": "brave",
+			"ArgumentList": [
+				{
+					"Argument": "--profile-directory=\u0022Default\u0022 --app=https://calendar.google.com"
+				}
+			],
+			"WindowTitle": ".*Google Calendar.*"
+		},
+		{
+			"Name": "Mnemo",
+			"Hotkeys": [
+				{
+					"Key": "M",
+					"Modifiers": "Alt, Control"
+				}
+			],
+			"FileName": "brave",
+			"ArgumentList": [
+				{
+					"Argument": "--profile-directory=\u0022Default\u0022 --app-id=cadlkienfkclaiaibeoongdcgmdikeeg"
+				}
+			],
+			"WindowTitle": ".*Nnemo.*",
+			"WindowTitleOverride": "Mnemo",
+			"HorizontalScreenCoverage": 50,
+			"HorizontalAlign": "Right",
+			"VerticalScreenCoverage": 100
+		}
+	],
+	"Hotkeys": [
+		{
+			"Key": "Q",
+			"Modifiers": "Control"
+		}
+	],
+	"FeatureFlags": {
+		"NewWindowCapture": true // Necessary to allow matching individual windows, regardless of parent process.
+	}
+}
