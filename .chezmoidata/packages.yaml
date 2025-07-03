@@ -3,6 +3,7 @@ packages:
     winget:
     - '7zip.7zip'
     - 'AmN.yasb'
+    - 'Audacity.Audacity'
     - 'Brave.Brave'
     - 'calibre.calibre'
     - 'dremin.RetroBar'
