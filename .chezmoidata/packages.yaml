@@ -25,7 +25,6 @@ packages:
     - 'OpenJS.NodeJS.LTS'
     - 'OpenWhisperSystems.Signal'
     - 'Oracle.MySQLWorkbench'
-    - 'Pinta.Pinta'
     - 'Proton.ProtonDrive'
     - 'Python.Launcher'
     - 'Rustlang.Rustup'
