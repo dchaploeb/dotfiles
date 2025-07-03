@@ -13,12 +13,13 @@ this repo, and a reminder for me of how to use it!
 ## Setting up a new environment
 
   1. Make sure the environment has git, ssh, and the appropriate package
-     manager.  In general these days this is already true in most of the
-     environments I use, but there are occasional exceptions.
+     manager.  In particular, as of July 2025, new Windows 11 installs have
+     a git that doesn't support ssh, so `winget install Git.Git` is
+     necessary.
 
-  2. Make an ssh key-- `ssh-keygen`-- and upload it to github
+  3. Make an ssh key-- `ssh-keygen`-- and upload it to github
 
-  3. Install `chezmoi` and have it apply my dotfiles repository from github.
+  4. Install `chezmoi` and have it apply my dotfiles repository from github.
      This installs a set of packages, which depend on the OS I'm running on.
      (The "installing the right set of packages" part is a work in progress,
      as discussed [below](#package-management)).
@@ -31,12 +32,12 @@ this repo, and a reminder for me of how to use it!
      (TODO: test this; it didn't work last time I tried it but I think I had
      the quotes in the wrong place.)
 
-  4. For some environments, we may be done!  But if we want applications
+  5. For some environments, we may be done!  But if we want applications
      installed, tweak settings in `.chezmoi.toml.tmpl` to specify which
      sets of packages `chezmoi` should install.  If anything was changed,
      run `chezmoi apply` again to install them.
 
-  5. Install packages manually if needed.  Right now, some of the packages get
+  6. Install packages manually if needed.  Right now, some of the packages get
      installed by running scripts which live in `bin/` and some packages I use
      regularly aren't supported by my `cheezmoi apply` workflow yet.  
      I try not to install anything with a gui installer-- as noted,
@@ -44,7 +45,7 @@ this repo, and a reminder for me of how to use it!
      clicking on it is not that!  So the goal is that this step eventually
      doesn't exist.  (`syncthing` is currently a semi-manual setup)
 
-  6. Set up additional sync services.  There are too many of these.  I keep
+  7. Set up additional sync services.  There are too many of these.  I keep
      trying to consolidate down but each service has benefits and limitations.
      `syncthing` is a recent addition to this and may end up replacing some of
      the cloud services.
