@@ -9,7 +9,6 @@ packages:
     - 'dremin.RetroBar'
     - 'Git.Git'
     - 'Google.GoogleDrive'
-    - 'GitHub.cli'
     - 'HTTPToolKit.HTTPToolKit'
     - 'ImageMagick.ImageMagick'
     - 'Insecure.Nmap'
