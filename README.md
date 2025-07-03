@@ -15,7 +15,9 @@ this repo, and a reminder for me of how to use it!
   1. Make sure the environment has git, ssh, and the appropriate package
      manager.  In particular, as of July 2025, new Windows 11 installs have
      a git that doesn't support ssh, so `winget install Git.Git` is
-     necessary.
+     necessary.  And turning on Developer mode is necessary.  (I think
+     turning on Developer mode also sets the execution Policy correctly; if not
+     do that too).
 
   3. Make an ssh key-- `ssh-keygen`-- and upload it to github
 
