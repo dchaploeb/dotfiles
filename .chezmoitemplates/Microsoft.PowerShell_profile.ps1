@@ -1,4 +1,4 @@
-if ($null -ne $Host.UI.RawUI -and !$PSCommandPath) {
+if ($null -ne $Host.UI.RawUI -and $MyInvocation.InvocationName -eq '.') {
     # Likely interactive
     $profileDir = Join-Path $HOME "bin/pwsh_profile.d"
 
