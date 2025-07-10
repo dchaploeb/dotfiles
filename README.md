@@ -17,11 +17,12 @@ this repo, and a reminder for me of how to use it!
      a git that doesn't support ssh, so `winget install Git.Git` is
      necessary.  And turning on Developer mode is necessary.  (I think
      turning on Developer mode also sets the execution Policy correctly; if not
-     do that too).
+     do that too).  Also July 2025, I happened to try to set up a subset
+     of this environment on Windows server 2016 (and made some modifications to support that).  It's a nice reminder of how far Windows has come-- a lot of the stuff I rely on routinely cannot be installed on Server 2016.  Some rough notes on the setup I did for [Server 2016](winserver2016.md) are in the repo; I may flesh them out in the future.  The main thing that's different is that `winget` doesn't exist on Server 2016.  I feel comfortable installing a few tools using `scoop` though...
 
-  3. Make an ssh key-- `ssh-keygen`-- and upload it to github
+  2. Make an ssh key-- `ssh-keygen`-- and upload it to github
 
-  4. Install `chezmoi` and have it apply my dotfiles repository from github.
+  3. Install `chezmoi` and have it apply my dotfiles repository from github.
      This installs a set of packages, which depend on the OS I'm running on.
      (The "installing the right set of packages" part is a work in progress,
      as discussed [below](#package-management)).
@@ -34,12 +35,12 @@ this repo, and a reminder for me of how to use it!
      (TODO: test this; it didn't work last time I tried it but I think I had
      the quotes in the wrong place.)
 
-  5. For some environments, we may be done!  But if we want applications
+  4. For some environments, we may be done!  But if we want applications
      installed, tweak settings in `.chezmoi.toml.tmpl` to specify which
      sets of packages `chezmoi` should install.  If anything was changed,
      run `chezmoi apply` again to install them.
 
-  6. Install packages manually if needed.  Right now, some of the packages get
+  5. Install packages manually if needed.  Right now, some of the packages get
      installed by running scripts which live in `bin/` and some packages I use
      regularly aren't supported by my `cheezmoi apply` workflow yet.  
      I try not to install anything with a gui installer-- as noted,

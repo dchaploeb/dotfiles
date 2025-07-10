@@ -50,7 +50,7 @@
   "TaskbarScale": 1,
   "DebugLogging": false,
   "AutoHide": false,
-  "LockTaskbar": false,
+  "LockTaskbar": true,
   "InvertIconsMode": 0,
   "ShowTaskBadges": true,
   "TaskMiddleClickAction": 0,
