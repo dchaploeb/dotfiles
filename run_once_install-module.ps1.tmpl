@@ -1,15 +1,27 @@
-{{ if eq .chezmoi.os "windowsx" -}}
+{{ if eq .chezmoi.os "windows" -}}
 {{ if ge (atoi .chezmoi.windowsVersion.currentBuild) 17763 }} # don't run if older
 # Ensure the module is installed and imported
 if (-not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client)) {
     try {
-        # Make sure NuGet provider is available
-        if (-not (Get-PackageProvider -ListAvailable -Name NuGet)) {
-            Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
-        }
 
-        # Install module quietly
-        Install-Module -Name Microsoft.WinGet.Client -Scope CurrentUser -Force -Confirm:$false
+# Set TLS 1.2 to avoid hangs on older systems
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+# Trust PSGallery if needed
+if (-not (Get-PSRepository | Where-Object { $_.Name -eq "PSGallery" -and $_.InstallationPolicy -eq "Trusted" })) {
+    Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+}
+
+# Install NuGet if needed
+if (-not (Get-PackageProvider -ListAvailable -Name NuGet)) {
+    Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
+}
+
+# Install WinGet.Client if needed
+if (-not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client)) {
+    Install-Module -Name Microsoft.WinGet.Client -Scope CurrentUser -Force -Confirm:$false
+}
+
     } catch {
         Write-Error "Failed to install Microsoft.WinGet.Client: $_"
     }
