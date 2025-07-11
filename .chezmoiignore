@@ -1,6 +1,7 @@
 LICENSE
 README.md
 TODO.md
+winserver2016.md
 {{ if ne .chezmoi.os "windows" }}
 AppData
 Documents

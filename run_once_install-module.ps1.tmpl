@@ -1,4 +1,4 @@
-{{ if eq .chezmoi.os "windows" -}}
+{{ if eq .chezmoi.os "windowsx" -}}
 {{ if ge (atoi .chezmoi.windowsVersion.currentBuild) 17763 }} # don't run if older
 # Ensure the module is installed and imported
 if (-not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client)) {
