@@ -3,9 +3,9 @@
                                  log into a desktop environment */}}
 {{- $update := false -}}    {{/* true if chezmoi should run updates on this 
                                  computer */}}
-{{- $winget := false -}}   {{/* true if chezmoi should install software */}}
-{{- $install_apps := false -}}   {{/* true if chezmoi should install applications */}}
-{{- $perl := false -}}      {{/* true if chezmoi should install perl mods */}}
+{{- $aptget := false -}}   {{/* true if chezmoi should install apt software */}}
+{{- $winget := false -}}   {{/* true if chezmoi should install winget software */}}
+{{- $install_apps := false -}}   {{/* true if chezmoi should install additional applications */}}
 {{- "" -}}
 
 {{- $osid := .chezmoi.os -}}
@@ -23,6 +23,7 @@
 
 {{- if eq .chezmoi.hostname "BURNHAM" "TONKEE" "POISONIVY" "RATIGAN" -}}
 {{-    $install_apps = true }}
+{{-    $aptget = true # for WSL }}
 {{-    $update = true }}
 {{- end -}}
 

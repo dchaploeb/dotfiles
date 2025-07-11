@@ -2,10 +2,10 @@ packages:
   windows:
     wingetcli:
     - 'Git.Git'
-    - 'ImageMagick.ImageMagick'
     - 'JanDeDobbeleer.OhMyPosh'
     - 'Python.Python.3.9'
     wingetcli_apps:
+    - 'ImageMagick.ImageMagick'
     - 'Insecure.Nmap'
     - 'Microsoft.PowerShell'
     - 'Microsoft.WSL'
@@ -54,6 +54,3 @@ packages:
   kali:
     apt:
     - 'man-db'
-  all:
-    cargo:
-    - 'diskonaut'

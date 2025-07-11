@@ -177,7 +177,7 @@ if (-not $folderName) {
 
 # Create shortcut
 $shortcut = $WshShell.CreateShortcut($shortcutPath)
-$shortcut.TargetPath = "C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
+$shortcut.TargetPath = $braveExe
 $shortcut.Arguments = "--profile-directory=""$folderName"" --app=$url"
 $iconLocation =  if (Test-Path $iconIco) { "$iconIco,0" } else { "$shortcut.TargetPath,0" }
 $shortcut.IconLocation = $iconLocation
