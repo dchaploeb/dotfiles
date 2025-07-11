@@ -20,6 +20,15 @@
 {{-    $update = true -}}
 {{- end -}}
 
+{{- if eq .chezmoi.hostname "BURNHAM" "TONKEE" -}}
+{{-    if eq $osid "windows" -}}
+{{-       $gui = true -}}
+{{-    end -}}
+{{-    $install = true -}}
+{{-    $update = true -}}
+{{- end -}}
+
+
 [data]
     osid = {{ $osid | quote }}
     gui = {{ $gui }}
