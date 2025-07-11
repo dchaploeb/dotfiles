@@ -1,35 +1,38 @@
 packages:
   windows:
-    winget:
+    wingetcli:
     - 'Git.Git'
+    - 'ImageMagick.ImageMagick'
+    - 'JanDeDobbeleer.OhMyPosh'
+    - 'Microsoft.PowerShell'
+    wingetcli_apps:
+    - 'Insecure.Nmap'
+    - 'Microsoft.WSL'
+    - 'OpenJS.NodeJS.LTS'
+    - 'Python.Launcher'
+    - 'Syncthing.Syncthing'
+    - 'Rustlang.Rustup'
+    wingetgui:
     - 'Brave.Brave'
     - 'dremin.RetroBar'
     - 'KeePassXCTeam.KeePassXC'
-    - 'Python.Launcher'
-    - 'JanDeDobbeleer.OhMyPosh'
     - 'Microsoft.VisualStudioCode'
-    - 'Microsoft.WSL'
+    wingetgui_apps:
     - '7zip.7zip'
     - 'AmN.yasb'
     - 'Audacity.Audacity'
     - 'calibre.calibre'
     - 'Google.GoogleDrive'
     - 'HTTPToolKit.HTTPToolKit'
-    - 'ImageMagick.ImageMagick'
-    - 'Insecure.Nmap'
     - 'Iterate.Cyberduck'
     - 'Microsoft.DotNet.SDK.9'
-    - 'Microsoft.PowerShell'
     - 'Microsoft.PowerToys'
     - 'Notepad++.Notepad++'
     - 'Obsidian.Obsidian'
-    - 'OpenJS.NodeJS.LTS'
     - 'OpenWhisperSystems.Signal'
     - 'Oracle.MySQLWorkbench'
     - 'Proton.ProtonDrive'
-    - 'Rustlang.Rustup'
     - 'SumatraPDF.SumatraPDF'
-    - 'Syncthing.Syncthing'
     - 'VideoLAN.VLC'
     - 'WiresharkFoundation.Wireshark'
   linux:

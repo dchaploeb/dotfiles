@@ -3,7 +3,8 @@
                                  log into a desktop environment */}}
 {{- $update := false -}}    {{/* true if chezmoi should run updates on this 
                                  computer */}}
-{{- $install := false -}}   {{/* true if chezmoi should install software */}}
+{{- $winget := false -}}   {{/* true if chezmoi should install software */}}
+{{- $install_apps := false -}}   {{/* true if chezmoi should install applications */}}
 {{- $perl := false -}}      {{/* true if chezmoi should install perl mods */}}
 {{- "" -}}
 
@@ -12,28 +13,27 @@
 {{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
 {{- end -}}
 
-{{- if eq .chezmoi.hostname "BURNHAM" "TONKEE" "RATIGAN" "POISONIVY" -}}
 {{-    if eq $osid "windows" -}}
-{{-       $gui = true -}}
+{{-       $gui = true }}
+{{-       $winget = false }}
+{{-       if ge (atoi .chezmoi.windowsVersion.currentBuild) 17763 }}
+{{-          $winget = true }}
+{{-       end -}}
 {{-    end -}}
-{{-    $install = true -}}
-{{-    $update = true -}}
+
+{{- if eq .chezmoi.hostname "BURNHAM" "TONKEE" "POISONIVY" "RATIGAN" -}}
+{{-    $install_apps = true }}
+{{-    $update = true }}
 {{- end -}}
 
-{{- if eq .chezmoi.hostname "BURNHAM" "TONKEE" -}}
-{{-    if eq $osid "windows" -}}
-{{-       $gui = true -}}
-{{-    end -}}
-{{-    $install = true -}}
-{{-    $update = true -}}
-{{- end -}}
 
 
 [data]
     osid = {{ $osid | quote }}
     gui = {{ $gui }}
     update = {{ $update }}
-    install = {{ $install }}
+    winget = {{ $winget }}
+    install_apps = {{ $install_apps }}
     perl = {{ $perl }}
     hostname = {{ .chezmoi.hostname | quote }}
 

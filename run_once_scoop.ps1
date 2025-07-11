@@ -1,7 +1,6 @@
 
 scoop bucket add nerd-fonts
 scoop install nerd-fonts/SourceCodePro-NF
-$fonts = (New-Object -ComObject Shell.Application).Namespace(0x14)
 
 $sourceFonts = Get-ChildItem "$Env:USERPROFILE\scoop\apps\SourceCodePro-NF\current\*.ttf"
 
