@@ -4,12 +4,12 @@ packages:
     - 'Git.Git'
     - 'ImageMagick.ImageMagick'
     - 'JanDeDobbeleer.OhMyPosh'
-    - 'Microsoft.PowerShell'
+    - 'Python.Python.3.9'
     wingetcli_apps:
     - 'Insecure.Nmap'
+    - 'Microsoft.PowerShell'
     - 'Microsoft.WSL'
     - 'OpenJS.NodeJS.LTS'
-    - 'Python.Launcher'
     - 'Syncthing.Syncthing'
     - 'Rustlang.Rustup'
     wingetgui:

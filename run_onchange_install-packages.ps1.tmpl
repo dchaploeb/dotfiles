@@ -31,10 +31,6 @@
         {{- end }}
         )
 
-        Write-Output "Resolved {{ len $ids }} package IDs"
-        Write-Output $requestedPackageIds
-
-
         # Step 2: Extract clean IDs from winget list (skip junk)
         $installedPackages = Get-WinGetPackage | Where-Object { $_.Source -eq "winget" } | Select-Object -ExpandProperty Id
         $installedPackages | sort | Out-File -FilePath "winget_packages.txt"

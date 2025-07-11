@@ -56,9 +56,10 @@ this repo, and a reminder for me of how to use it!
      2. Proton Drive
      3. vscode sync
      4. Obsidian sync
-     5. iCloud
-     6. Google Drive.
-     7. OneDrive
+     5. Brave sync
+     6. iCloud
+     7. Google Drive.
+     8. OneDrive
 
 That's it!  Everything I need is installed, my data is synced and configured
 the way I like it at this point.  Of course, steps 5 and 6 still involve some
@@ -135,16 +136,30 @@ Controlled by `.chezmoi.toml.tmpl` and `.chezmoidata/packages.yaml`
 
 - ✅ Install needed packages on linux
 - ✅ Install zsh and set it to be my shell.
-- TODO: Finish winget package installation (this might be done)
-- TODO: Fix powershell module installation (this might be done)
-- TODO: Move as many `bin/` install scripts as possible to actual scripts run
-    by `chezmoi`.
+- ✅ Install scoop and my favorite Nerd font
+- ✅ Install Nuget and the Winget Powershell module
+- ✅ Winget Package installation is in something like a final form.
+- Unfortunately I need a fresh computer to test changes to this, so
+  it tends to be a little while between updates.  But I am closer to
+  something I feel comfortable running on a computer that is not
+  just going to be mine-- the default config installs some basic CLI
+  tools and nothing else, and should do most of its work under
+  the user it runs as.
+- TODO: move some application installs to `scoop` instead of winget
+  so they are installed for the current user rather than system-wide.
+  Probably some of the apps I use are going to require an administrative
+  login, but I'd like to minimize this, and eliminate it entirely on 
+  the smaller group of apps I install on computers that aren't mine.
+- `scoop` could also be used to install CLI tools on older Windows
+  servers, where winget is not available.
 
 ### Start Menus, bars, launchers, and Web Shortcuts (on Windows)
 
 - ✅ Sync Retrobar theme and prefs
 - ✅ Sync yasb theme and prefs
+- ✅ Make sure Brave Profiles exist with appropriate names
 - ✅ Build and install Web shortcuts
+- TODO: Something's still glitchy with the initial setup of web shortcuts.
 - TODO: Window management tool prefs, once I have a stable configuration
 
 Web shortcuts are controlled by `.chezmoidata/braveapps.yaml` and
@@ -166,3 +181,8 @@ This is working now; the system will build shortcuts for me based on a config
 file and put them in a start menu folder, updating them as needed.  Still some
 tweaks to this to come, but it's a working feature (and should be adaptable to
 any Chromium-based browser that supports application shortcuts).
+
+This now also creates the Brave profiles if needed.  It does something unsupporteds
+to make this work-- it edits the Brave "LocalState" file in a minor way.  If 
+someone can suggest a supported way to make sure that a profile with a particular 
+name exists on a newly-installed system without creating it manually, I'm all ears.
