@@ -1,7 +1,7 @@
 {{/* boolean feature tags */}}
 {{- $gui := false -}}       {{/* true if this machine is one where I typically 
                                  log into a desktop environment */}}
-{{- $update := false -}}    {{/* true if chezmoi should run updates on this 
+{{- $pkg_update := false -}}    {{/* true if chezmoi should run updates on this 
                                  computer */}}
 {{- $aptget := false -}}   {{/* true if chezmoi should install apt software */}}
 {{- $winget := false -}}   {{/* true if chezmoi should install winget software */}}
@@ -23,19 +23,18 @@
 
 {{- if eq .chezmoi.hostname "BURNHAM" "TONKEE" "POISONIVY" "RATIGAN" -}}
 {{-    $install_apps = true }}
-{{-    $aptget = true # for WSL }}
-{{-    $update = true }}
-{{- end -}}
-
-
+{{-    $gui = true }}
+{{-    $aptget = true }} {{/* for WSL */}}
+{{-    $pkg_update = true }}
+{{- end }}
 
 [data]
     osid = {{ $osid | quote }}
     gui = {{ $gui }}
-    update = {{ $update }}
+    pkg_update = {{ $pkg_update }}
+    aptget = {{ $aptget }}
     winget = {{ $winget }}
     install_apps = {{ $install_apps }}
-    perl = {{ $perl }}
     hostname = {{ .chezmoi.hostname | quote }}
 
 {{ if $gui -}}
