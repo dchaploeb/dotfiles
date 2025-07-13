@@ -18,7 +18,13 @@ this repo, and a reminder for me of how to use it!
      necessary.  And turning on Developer mode is necessary.  (I think
      turning on Developer mode also sets the execution Policy correctly; if not
      do that too).  Also July 2025, I happened to try to set up a subset
-     of this environment on Windows server 2016 (and made some modifications to support that).  It's a nice reminder of how far Windows has come-- a lot of the stuff I rely on routinely cannot be installed on Server 2016.  Some rough notes on the setup I did for [Server 2016](winserver2016.md) are in the repo; I may flesh them out in the future.  The main thing that's different is that `winget` doesn't exist on Server 2016.  I feel comfortable installing a few tools using `scoop` though...
+     of this environment on Windows server 2016 (and made some modifications to
+     support that).  It's a nice reminder of how far Windows has come-- a lot
+     of the stuff I rely on routinely cannot be installed on Server 2016.  
+     Some rough notes on the setup I did for [Server 2016](winserver2016.md)
+     are in the repo; I may flesh them out in the future.  The main thing
+     that's different is that `winget` doesn't exist on Server 2016.  
+     I feel comfortable installing a few tools using `scoop` though...
 
   2. Make an ssh key-- `ssh-keygen`-- and upload it to github
 
@@ -48,7 +54,7 @@ this repo, and a reminder for me of how to use it!
      clicking on it is not that!  So the goal is that this step eventually
      doesn't exist.  (`syncthing` is currently a semi-manual setup)
 
-  7. Set up additional sync services.  There are too many of these.  I keep
+  6. Set up additional sync services.  There are too many of these.  I keep
      trying to consolidate down but each service has benefits and limitations.
      `syncthing` is a recent addition to this and may end up replacing some of
      the cloud services.
@@ -148,7 +154,7 @@ Controlled by `.chezmoi.toml.tmpl` and `.chezmoidata/packages.yaml`
 - TODO: move some application installs to `scoop` instead of winget
   so they are installed for the current user rather than system-wide.
   Probably some of the apps I use are going to require an administrative
-  login, but I'd like to minimize this, and eliminate it entirely on 
+  login, but I'd like to minimize this, and eliminate it entirely on
   the smaller group of apps I install on computers that aren't mine.
 - `scoop` could also be used to install CLI tools on older Windows
   servers, where winget is not available.
@@ -163,7 +169,10 @@ Controlled by `.chezmoi.toml.tmpl` and `.chezmoidata/packages.yaml`
 - TODO: Window management tool prefs, once I have a stable configuration
 
 Web shortcuts are controlled by `.chezmoidata/braveapps.yaml` and
-`run_onchange_setup-brave-shortcuts.ps1.tmpl`
+`run_onchange_setup-brave-shortcuts.ps1.tmpl`; it depends on Python, the
+PIL library, and the `bin/convert_png_to_ico.py` script (all of which are
+installed by my dotfiles, but since I don't imagine anyone else will be
+using my whole set of dotfiles...)
 
 The web shortcuts feature is my favorite thing in here and deserves some
 comment:
@@ -182,7 +191,8 @@ file and put them in a start menu folder, updating them as needed.  Still some
 tweaks to this to come, but it's a working feature (and should be adaptable to
 any Chromium-based browser that supports application shortcuts).
 
-This now also creates the Brave profiles if needed.  It does something unsupporteds
-to make this work-- it edits the Brave "LocalState" file in a minor way.  If 
-someone can suggest a supported way to make sure that a profile with a particular 
-name exists on a newly-installed system without creating it manually, I'm all ears.
+This now also creates the Brave profiles if needed.  It does something
+unsupported to make this work-- it edits the Brave "LocalState" file in a minor
+way.  If someone can suggest a supported way to make sure that a profile with a
+particular name exists on a newly-installed system without creating it 
+manually, I'm all ears.
