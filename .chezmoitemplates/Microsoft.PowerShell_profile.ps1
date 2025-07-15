@@ -1,4 +1,4 @@
-if ($null -ne $Host.UI.RawUI -and $MyInvocation.InvocationName -eq '.') {
+if ($null -ne $Host.UI.RawUI -and $MyInvocation.InvocationName -eq '.' -and $env:WT_SESSION) {
     # Likely interactive
     $profileDir = Join-Path $HOME "bin/pwsh_profile.d"
 
