@@ -28,8 +28,7 @@
         $requestedPackageIds = @(
         {{- range $i, $pkg := $ids -}}
             {{ $pkg }}{{ if lt $i (sub (len $ids) 1) }},{{ end }}
-        {{- end }}
-        )
+        {{- end }})
 
         # Step 2: Extract clean IDs from winget list (skip junk)
         $installedPackages = Get-WinGetPackage | Where-Object { $_.Source -eq "winget" } | Select-Object -ExpandProperty Id
@@ -42,6 +41,10 @@
                 winget install -h $id -e --no-upgrade
             }
         }
+
+	foreach ($id in $requestedPackageIds) {
+	    Install-WingetIfMissing -id $id -installedPackages $installedPackages
+	}
 
     {{ end -}}
 {{ end -}}

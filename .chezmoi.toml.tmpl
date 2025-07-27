@@ -21,12 +21,13 @@
 {{-       end -}}
 {{-    end -}}
 
-{{- if eq .chezmoi.hostname "TONKEE" -}}
+{{- if eq .chezmoi.hostname "TONKEE" "CLAUDETTE" -}}
 {{-    $install_apps = true }}
 {{-    $gui = true }}
 {{-    $aptget = true }} {{/* for WSL */}}
 {{-    $pkg_update = true }}
 {{- end -}}
+
 
 [data]
     osid = {{ $osid | quote }}
