@@ -33,7 +33,7 @@ QToolTip {
     font-size: 12px;
     color: var(--text);
     font-weight: 600;
-    font-family: "SauceCodePro Nerd Font";
+    font-family: "SauceCodePro NF";
     margin: 0;
     padding: 0;
 }
@@ -223,7 +223,7 @@ QToolTip {
     color: #7a7f8b;
     padding: 0 4px;
     margin: 0;
-    font-family: "SauceCodePro Nerd Font";
+    font-family: "SauceCodePro NF";
     font-weight: 400;
     font-size: 20px;
 }
