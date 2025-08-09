@@ -1,0 +1,46 @@
+{{- if .gui }}
+# Create Startup shortcuts for RetroBar & yasb, then run them on first create.
+
+$startup = [Environment]::GetFolderPath('Startup')
+$shell   = New-Object -ComObject WScript.Shell
+
+function New-StartupShortcut {
+    param([string]$ExePath, [string]$Name)
+
+    if (-not (Test-Path $ExePath)) { return }  # wait until installed
+
+    $lnk = Join-Path $startup ($Name + '.lnk')
+    $created = $false
+
+    if (-not (Test-Path $lnk)) {
+        $sc = $shell.CreateShortcut($lnk)
+        $sc.TargetPath      = $ExePath
+        $sc.WorkingDirectory= Split-Path $ExePath
+        $sc.Save()
+        Write-Host "Created Startup shortcut: $Name"
+        $created = $true
+    }
+
+    if ($created) {
+        # Start once, right after creating the shortcut
+        if (-not (Get-Process -Name ($Name) -ErrorAction SilentlyContinue)) {
+            Start-Process -FilePath $ExePath
+            Write-Host "Launched: $Name"
+        }
+    }
+}
+
+# RetroBar
+$retroCandidates = @(
+  "$env:LOCALAPPDATA\Programs\RetroBar\RetroBar.exe",
+  "$env:ProgramFiles\RetroBar\RetroBar.exe"
+) | Where-Object { Test-Path $_ }
+if ($retroCandidates) { New-StartupShortcut -ExePath $retroCandidates[0] -Name 'RetroBar' }
+
+# yasb
+$yasbCandidates = @(
+  "$env:LOCALAPPDATA\Programs\yasb\yasb.exe",
+  "$env:ProgramFiles\yasb\yasb.exe"
+) | Where-Object { Test-Path $_ }
+if ($yasbCandidates) { New-StartupShortcut -ExePath $yasbCandidates[0] -Name 'yasb' }
+{{- end }}
