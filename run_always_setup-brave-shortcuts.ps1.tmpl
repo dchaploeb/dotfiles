@@ -1,3 +1,4 @@
+
 # {{- if .gui -}} 
 # {{- $brExe1 := (joinPath (env "ProgramFiles") "BraveSoftware" "Brave-Browser" "Application" "brave.exe") -}}
 # {{- $brExe2 := (joinPath (env "LOCALAPPDATA") "BraveSoftware" "Brave-Browser" "Application" "brave.exe") -}}
@@ -11,6 +12,28 @@ param (
     [string]$ShortcutDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Custom Web Apps",
     [string]$IconCacheDir = "$env:LOCALAPPDATA\BraveShortcutIcons"
 )
+
+# --- chezmoi render guard (auto-skip if nothing changed) ---
+# Template/data hash computed at render time:
+#   - template source: run_always_setup-brave-shortcuts.ps1.tmpl
+#   - data file: .chezmoidata/braveapps.yaml
+$RenderHash = '{{- $tmpl := include "run_always_setup-brave-shortcuts.ps1.tmpl" -}}{{- $data := include ".chezmoidata/braveapps.yaml" -}}{{- sha256sum (printf "%s%s" $tmpl $data) -}}'
+
+$OkDir  = Join-Path $HOME ".local/share/chezmoi/state"
+$OkFile = Join-Path $OkDir  "setup-brave-shortcuts.ok"
+
+function Get-LastHash {
+  if (Test-Path $OkFile) {
+    try { (Get-Content $OkFile -Raw | ConvertFrom-Json).hash } catch { $null }
+  }
+}
+
+$LastHash = Get-LastHash
+if ($LastHash -eq $RenderHash) {
+  Write-Host "setup-brave-shortcuts: no changes (hash match), skipping."
+  return
+}
+# --- end render guard ---
 
 # Resolve a Python exe and ensure Pillow
 $python = $null
@@ -358,6 +381,18 @@ if (Test-Path $ls) {
     Write-Host "Local State file not found."
     
 }
+# --- mark success with current render hash ---
+if (-not $Error -or $Error.Count -eq 0) {
+  New-Item -ItemType Directory -Force (Split-Path $OkFile) | Out-Null
+  @{ hash = $RenderHash; when = (Get-Date).ToString("o") } |
+    ConvertTo-Json | Set-Content -Path $OkFile -Encoding UTF8
+  Write-Host "setup-brave-shortcuts: success, recorded new hash."
+} else {
+  Write-Warning "setup-brave-shortcuts: errors present; not updating hash."
+}
+
+
+
 
 # {{- end -}}
 # {{ end }}
