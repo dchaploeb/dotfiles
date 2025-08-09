@@ -13,6 +13,9 @@ param (
     [string]$IconCacheDir = "$env:LOCALAPPDATA\BraveShortcutIcons"
 )
 
+[Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+[Console]::InputEncoding  = [Text.UTF8Encoding]::new($false)
+
 # --- chezmoi render guard (auto-skip if nothing changed) ---
 $RenderHash = '{{- $tmpl := include "run_always_setup-brave-shortcuts.ps1.tmpl" -}}{{- $data := include ".chezmoidata/braveapps.yaml" -}}{{- sha256sum (printf "%s%s" $tmpl $data) -}}'
 $OkDir  = Join-Path $HOME ".local/share/chezmoi/state"
