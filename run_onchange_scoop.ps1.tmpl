@@ -1,4 +1,6 @@
 
+{{ if lookPath "scoop" }}
+
 scoop bucket add nerd-fonts
 scoop install nerd-fonts/SourceCodePro-NF
 
@@ -32,3 +34,7 @@ foreach ($font in $sourceFonts) {
         Copy-Item -Path $font.FullName -Destination $destFont -Force
     }
 }
+
+{{ else }}
+Invoke-WebRequest get.scoop.sh -UseBasicParsing | Invoke-Expression
+{{ end }}

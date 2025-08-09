@@ -1,0 +1,1 @@
+Add-ToPath ~/bin

@@ -48,3 +48,9 @@ function Add-ToPath {
         }
     }
 }
+
+function Get-PathFromRegistry {
+  $mach = [Environment]::GetEnvironmentVariable('Path','Machine')
+  $user = [Environment]::GetEnvironmentVariable('Path','User')
+  $env:Path = ($mach + $(if ($null -ne $user) { $user } else { '' })) -join ';'
+}

@@ -30,21 +30,171 @@
             {{ $pkg }}{{ if lt $i (sub (len $ids) 1) }},{{ end }}
         {{- end }})
 
-        # Step 2: Extract clean IDs from winget list (skip junk)
-        $installedPackages = Get-WinGetPackage | Where-Object { $_.Source -eq "winget" } | Select-Object -ExpandProperty Id
-        $installedPackages | sort | Out-File -FilePath "winget_packages.txt"
+       # ==============================================
+        # NEW Step 2/3: source-agnostic detection with config-driven alt IDs
+        # - Supports winget/msstore IDs, MSIX/Appx names & package family names
+        # - No package-specific code here; mappings live in .packages.windows.altIds
+        # ==============================================
 
+        # Step 2: Build alt-id map from config (msstore/msix/appx fallbacks)
+        $AltIdMap = @{}
+        {{- if .packages.windows.altIds }}
+        {{- range $wingetId, $alts := .packages.windows.altIds }}
+        $AltIdMap[{{ printf "%q" $wingetId }}] = @(
+        {{- range $i, $alt := $alts -}}
+          {{ printf "%q" $alt }}{{ if lt $i (sub (len $alts) 1) }},{{ end }}
+        {{- end }}
+        )
+        {{ end -}}
+        {{- end }}
 
-        # Step 3: Install anything missing
-        function Install-WingetIfMissing($id, $installedPackages) {
-            if (-not ($installedPackages -contains $id)) {
-                winget install -h $id -e --no-upgrade
+        function Get-AltIds {
+            param([Parameter(Mandatory)][string]$Id)
+
+            $alts = New-Object System.Collections.Generic.List[string]
+
+            # 1) From config
+            if ($AltIdMap.ContainsKey($Id)) {
+                foreach ($v in @($AltIdMap[$Id])) { [void]$alts.Add([string]$v) }
             }
+
+            # 2) From winget show (generic discovery of Store ProductId)
+            $manifest = & winget show --id $Id -e 2>$null
+            if ($LASTEXITCODE -eq 0 -and $manifest) {
+                $match = ($manifest | Select-String 'Store ProductId:\s*(\S+)').Matches
+                if ($match.Count -gt 0) {
+                    $storeId = $match[0].Groups[1].Value
+                    if ($storeId) { $alts.Add($storeId) }
+                }
+            }
+
+            $alts = $alts.ToArray() | Select-Object -Unique
+            return $alts
         }
 
-	foreach ($id in $requestedPackageIds) {
-	    Install-WingetIfMissing -id $id -installedPackages $installedPackages
-	}
+
+# ==============================================
+# NEW: Detection status helper (generic)
+# Returns: PSCustomObject { Installed, MatchId, Method }
+# ==============================================
+function Resolve-InstalledStatus {
+    param([Parameter(Mandatory)][string]$Id)
+
+    # 1) Exact winget ID
+    $null = & winget list --id $Id -e 2>$null
+    if ($LASTEXITCODE -eq 0) { return [pscustomobject]@{ Installed=$true; MatchId=$Id; Method='winget-id' } }
+
+    # 2) Alternates (from config + discovered)
+    foreach ($alt in (Get-AltIds -Id $Id)) {
+        $null = & winget list --id $alt -e 2>$null
+        if ($LASTEXITCODE -eq 0) { return [pscustomobject]@{ Installed=$true; MatchId=$alt; Method='winget-alt' } }
+        try {
+            $pkgByName = Get-AppxPackage -Name $alt -ErrorAction SilentlyContinue
+            if ($pkgByName) { return [pscustomobject]@{ Installed=$true; MatchId=$pkgByName.Name; Method='appx-name' } }
+            $pkgByFam  = Get-AppxPackage -PackageFamilyName $alt -ErrorAction SilentlyContinue
+            if ($pkgByFam)  { return [pscustomobject]@{ Installed=$true; MatchId=$pkgByFam.PackageFamilyName; Method='appx-family' } }
+        } catch { }
+    }
+
+    # 3) Final Appx try using original Id
+    try {
+        $pkg = Get-AppxPackage -Name $Id -ErrorAction SilentlyContinue
+        if ($pkg) { return [pscustomobject]@{ Installed=$true; MatchId=$pkg.Name; Method='appx-name' } }
+        $pkg = Get-AppxPackage -PackageFamilyName $Id -ErrorAction SilentlyContinue
+        if ($pkg) { return [pscustomobject]@{ Installed=$true; MatchId=$pkg.PackageFamilyName; Method='appx-family' } }
+    } catch { }
+
+    return [pscustomobject]@{ Installed=$false; MatchId=$null; Method=$null }
+}
+
+
+        function Test-InstalledAny {
+            param([Parameter(Mandatory)][string]$Id)
+
+            # A) Exact winget ID
+            $null = & winget list --id $Id -e 2>$null
+            if ($LASTEXITCODE -eq 0) { return $true }
+
+            # B) Try all alternates (config + discovered)
+            foreach ($alt in (Get-AltIds -Id $Id)) {
+                # Try winget first
+                $null = & winget list --id $alt -e 2>$null
+                if ($LASTEXITCODE -eq 0) { return $true }
+
+                # If alt looks like MSIX/Appx, ask Windows directly
+                try {
+                    $pkgByName = Get-AppxPackage -Name $alt -ErrorAction SilentlyContinue
+                    if ($pkgByName) { return $true }
+                    $pkgByFam  = Get-AppxPackage -PackageFamilyName $alt -ErrorAction SilentlyContinue
+                    if ($pkgByFam)  { return $true }
+                } catch { }
+            }
+
+            # C) Final try as Appx by original Id (in case caller passed an Appx name)
+            try {
+                if (Get-AppxPackage -Name $Id -ErrorAction SilentlyContinue) { return $true }
+                if (Get-AppxPackage -PackageFamilyName $Id -ErrorAction SilentlyContinue) { return $true }
+            } catch { }
+
+            return $false
+        }
+
+        # Step 3: Install anything missing (drive by winget ID only)
+        function Install-WingetIfMissing {
+            param([Parameter(Mandatory)][string]$Id)
+
+            if (Test-InstalledAny -Id $Id) { return }
+            & winget install -h -e --no-upgrade --accept-source-agreements --accept-package-agreements --id $Id
+        }
+
+
+# 0) Snapshot of **ALL** currently installed via winget (as before)
+# Generate legacy winget-only list (all installed winget packages)
+$allWinGet  = Get-WinGetPackage 2>$null
+$wingetOnly = $allWinGet | Where-Object { $_.Source -eq "winget" }
+($wingetOnly | Select-Object -ExpandProperty Id | Sort-Object) |
+    Set-Content -Encoding UTF8 "winget_packages.txt"
+$wingetOnly | Select-Object Id, Name, Version | Sort-Object Id |
+    Export-Csv -Encoding UTF8 -NoTypeInformation "winget_packages.csv"
+
+# Populate missing source values for ARP and MSIX/Appx separately
+$allWinGet | ForEach-Object {
+    if (-not $_.Source -or $_.Source -eq '') {
+        if ($_.Id -match '^MSIX' -or (Get-AppxPackage -Name $_.Id -ErrorAction SilentlyContinue)) {
+            $_ | Add-Member -NotePropertyName Source -NotePropertyValue 'msix' -Force
+        } else {
+            $_ | Add-Member -NotePropertyName Source -NotePropertyValue 'arp' -Force
+        }
+    }
+}
+$allWinGet | Select-Object Source, Id, Name, Version | Sort-Object Source, Id |
+    Export-Csv -Encoding UTF8 -NoTypeInformation "winget_all_sources.csv"
+
+# 1) Detect + install requested packages with rich reporting
+$DetectionResults = @()
+foreach ($id in $requestedPackageIds) {
+    $status = Resolve-InstalledStatus -Id $id
+    $DetectionResults += [pscustomobject]@{
+        RequestedId = $id
+        Installed   = $status.Installed
+        MatchId     = $status.MatchId
+        Method      = $status.Method
+    }
+    if (-not $status.Installed) {
+        & winget install -h -e --no-upgrade --accept-source-agreements --accept-package-agreements --id $id
+    }
+}
+
+# 2) Outputs based on detection (can include msstore/msix/appx matches)
+$DetectionResults |
+    Where-Object { $_.Installed -and $_.MatchId } |
+    Select-Object -ExpandProperty MatchId |
+    Sort-Object |
+    Set-Content -Encoding UTF8 "installed_detected.txt"
+
+$DetectionResults |
+    Sort-Object RequestedId |
+    Export-Csv -NoTypeInformation -Encoding UTF8 "installed_detected.csv"
 
     {{ end -}}
 {{ end -}}

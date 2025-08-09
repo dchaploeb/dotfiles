@@ -35,6 +35,10 @@ packages:
     - 'SumatraPDF.SumatraPDF'
     - 'VideoLAN.VLC'
     - 'WiresharkFoundation.Wireshark'
+    altIds:
+      Microsoft.WSL:
+        - MicrosoftCorporationII.WindowsSubsystemForLinux
+        - MicrosoftCorporationII.WindowsSubsystemForLinux_8wekyb3d8bbwe
   linux:
     apt:
     - 'zsh'

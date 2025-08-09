@@ -1,10 +1,39 @@
-{{- if .gui -}} 
+# {{- if .gui -}} 
+# {{- $brExe1 := (joinPath (env "ProgramFiles") "BraveSoftware" "Brave-Browser" "Application" "brave.exe") -}}
+# {{- $brExe2 := (joinPath (env "LOCALAPPDATA") "BraveSoftware" "Brave-Browser" "Application" "brave.exe") -}}
+# {{- $brExe  := "" -}}
+# {{- if (stat $brExe1) -}} {{- $brExe = $brExe1 -}}
+# {{- else if (stat $brExe2) -}} {{- $brExe = $brExe2 -}} {{- end -}}
+# {{- $hasPy := or (lookPath "py") (lookPath "python") -}}
+# {{- if and $brExe $hasPy }}
 
 param (
     [string]$ShortcutDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Custom Web Apps",
     [string]$IconCacheDir = "$env:LOCALAPPDATA\BraveShortcutIcons"
 )
- 
+
+# Resolve a Python exe and ensure Pillow
+$python = $null
+$cmd = Get-Command py -ErrorAction SilentlyContinue
+if ($cmd) { $python = $cmd.Path } else {
+  $cmd = Get-Command python -ErrorAction SilentlyContinue
+  if ($cmd) { $python = $cmd.Path }
+}
+if ($python) {
+  try { & $python -m pip --version | Out-Null } catch { & $python -m ensurepip --upgrade | Out-Null }
+  & $python -c @'
+import sys
+try:
+    import PIL
+    sys.exit(0)
+except Exception:
+    sys.exit(1)
+'@
+  if ($LASTEXITCODE -ne 0) {
+    & $python -m pip install --user --upgrade Pillow
+  }
+}
+
 function Resolve-BraveProfileFolderName {
     param (
         [Parameter(Mandatory = $true)]
@@ -12,7 +41,6 @@ function Resolve-BraveProfileFolderName {
     )
 
     $localStatePath = "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data\Local State"
-
     if (-not (Test-Path $localStatePath)) {
         Write-Error "Local State file not found."
         return $null
@@ -20,18 +48,16 @@ function Resolve-BraveProfileFolderName {
 
     $json = Get-Content $localStatePath -Raw | ConvertFrom-Json
     $infoCache = $json.profile.info_cache
-
     foreach ($folder in $infoCache.PSObject.Properties.Name) {
         $profileInfo = $infoCache.$folder
-        $name = $profileInfo.name
-        if ($name -eq $DisplayName) {
+        if ($profileInfo.name -eq $DisplayName) {
             return $folder
         }
     }
-
     Write-Error "Could not find Brave profile with display name '$DisplayName'"
     return $null
 }
+
 
 function Set-BraveProfileDisplayName {
     # This is completely unsupported and will cause everything you touch to turn to hair.
@@ -58,6 +84,134 @@ function Set-BraveProfileDisplayName {
     Write-Output "Renamed Brave profile $folderName to '$desiredDisplayName'"
 }
 
+function Wait-ForPath {
+    param([string]$Path, [int]$Seconds = 15)
+    $deadline = (Get-Date).AddSeconds($Seconds)
+    while ((Get-Date) -lt $deadline) {
+        if (Test-Path $Path) { return $true }
+        Start-Sleep -Milliseconds 250
+    }
+    return $false
+}
+
+function Get-LocalStateJson {
+    $ls = "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data\Local State"
+    if (Test-Path $ls) { try { return (Get-Content $ls -Raw | ConvertFrom-Json) } catch {} }
+    return $null
+}
+
+function Get-InfoCache {
+    $json = Get-LocalStateJson
+    if ($json -and $json.profile -and $json.profile.info_cache) { return $json.profile.info_cache }
+    return $null
+}
+
+function Ensure-ProfileFolderExists {
+    param([string]$FolderKey, [string]$BraveExe)
+    $ud  = "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data"
+    $dir = Join-Path $ud $FolderKey
+    if (Test-Path $dir) { return $true }
+
+    # Launch Brave targeting that folder, wait for it to appear, then stop.
+    Start-Process $BraveExe -ArgumentList @(
+        "--user-data-dir=$ud","--profile-directory=$FolderKey",
+        "--no-first-run","--new-window","about:blank"
+    ) -WindowStyle Hidden
+    $ok = Wait-ForPath -Path $dir -Seconds 12
+    Get-Process brave* -EA SilentlyContinue | Stop-Process -Force
+    return $ok
+}
+
+function Next-AvailableProfileKey {
+    # Find next "Profile N" directory that doesn't exist yet
+    $ud = "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data"
+    for ($i=1; $i -lt 100; $i++) {
+        $cand = Join-Path $ud ("Profile {0}" -f $i)
+        if (-not (Test-Path $cand)) { return ("Profile {0}" -f $i) }
+    }
+    return $null
+}
+
+function Set-DisplayName-IfDefault {
+    # Only set name if it's unassigned (i.e., equals the folder key)
+    param([string]$FolderKey, [string]$DesiredName)
+    $ls = "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data\Local State"
+    if (-not (Test-Path $ls)) { return }
+
+    $json = Get-Content $ls -Raw | ConvertFrom-Json
+    if (-not $json.profile) { $json | Add-Member profile (@{}) }
+    if (-not $json.profile.info_cache) { $json.profile | Add-Member info_cache (@{}) }
+    if (-not $json.profile.info_cache.$FolderKey) {
+        $json.profile.info_cache | Add-Member $FolderKey (@{})
+    }
+    $current = $json.profile.info_cache.$FolderKey.name
+    if (-not $current) { $current = $FolderKey }
+
+    if ($current -ieq $FolderKey) {
+        $json.profile.info_cache.$FolderKey.name = $DesiredName
+        $json | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 $ls
+    }
+}
+
+function Ensure-ProfileForDisplayName {
+    param([string]$DisplayName, [string]$BraveExe)
+
+    # 1) If Local State already maps display name → folder, use it.
+    $info = Get-InfoCache
+    if ($info) {
+        foreach ($k in $info.PSObject.Properties.Name) {
+            if ($info.$k.name -eq $DisplayName) { return $k }
+        }
+    }
+
+    # 2) Build list of existing folders and which are safe to rename (name==folder key)
+    $ud = "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data"
+    $existing = @()
+    if (Test-Path $ud) {
+        Get-ChildItem $ud -Directory | ForEach-Object {
+            if ($_.Name -ieq 'Default' -or $_.Name -like 'Profile *') { $existing += $_.Name }
+        }
+    }
+    $safeToRename = @()
+    foreach ($folder in $existing) {
+        $currentName = $null
+        if ($info -and $info.$folder) { $currentName = $info.$folder.name }
+        if (-not $currentName) { $currentName = $folder }
+        if ($currentName -ieq $folder) { $safeToRename += $folder }
+    }
+
+    # 3) Pick a target folder: prefer a rename-safe existing one; else create new "Profile N"
+    $target = $null
+    if ($safeToRename.Count -gt 0) {
+        # deterministic order: Default first, then lowest Profile N
+        $target = ($safeToRename | Sort-Object {
+            if ($_ -ieq 'Default') { 0 } else {
+                if ($_ -match '^Profile (\d+)$') { [int]$Matches[1] } else { 9999 }
+            }
+        } | Select-Object -First 1)
+    } else {
+        $target = Next-AvailableProfileKey
+        if (-not $target) { return $null }
+        if (-not (Ensure-ProfileFolderExists -FolderKey $target -BraveExe $BraveExe)) { return $null }
+        # refresh info cache after creation
+        $info = Get-InfoCache
+    }
+
+    # 4) Assign display name only if the chosen folder is still default‑named
+    Set-DisplayName-IfDefault -FolderKey $target -DesiredName $DisplayName
+
+    # 5) Try to resolve again by display name; if still not present, just use the folder key
+    $info = Get-InfoCache
+    if ($info) {
+        foreach ($k in $info.PSObject.Properties.Name) {
+            if ($info.$k.name -eq $DisplayName) { return $k }
+        }
+    }
+    return $target
+}
+
+
+
 
 <#
 {{- $apps := include ".chezmoidata/braveapps.yaml" | fromYaml -}}
@@ -72,7 +226,7 @@ New-Item -ItemType Directory -Force -Path $IconCacheDir | Out-Null
 $WshShell = New-Object -ComObject WScript.Shell
 
 <# begin app loop #>
-{{- range $apps.brave_apps }}
+# {{- range $apps.brave_apps }}
 $name = "{{ .name }}"
 $url = "{{ .url }}"
 
@@ -82,15 +236,15 @@ $faviconUrl = $null
 $domain = $null
 $iconBase = $null
 
-{{- if (index . "iconurl") }}
+# {{- if (index . "iconurl") }}
 $faviconUrl = "{{ .iconurl }}"
 $iconBase = "custom_icon_{{ .name | replace " " "_" }}"
-{{- else }}
+# {{- else }}
 $icondomain = "{{ if (index . "icondomain") }}{{ .icondomain }}{{ else }}{{ .url }}{{ end }}"
 $domain = ([uri]$icondomain).Host
 $faviconUrl = "https://www.google.com/s2/favicons?sz=64&domain=$domain"
 $iconBase = "$($domain.Replace('.', '_'))"
-{{- end }}
+# {{- end }}
 
 $extension = [System.IO.Path]::GetExtension($faviconUrl).ToLower()
 
@@ -111,7 +265,11 @@ if (-not (Test-Path $iconPng)) {
 # Convert PNG to ICO only if needed
 if ($extension -ne ".ico" -and (Test-Path $iconPng) -and (-not (Test-Path $iconIco))) {
     try {
-        python $home/bin/convert_png_to_ico.py "$iconPng" "$iconIco"
+        if ($python) {
+            & $python "$HOME\bin\convert_png_to_ico.py" "$iconPng" "$iconIco"
+        } else {
+            Write-Warning "No Python; using PNG as-is for $name"
+        }
     } catch {
         Write-Warning "Failed to convert favicon for $name to ICO"
     }
@@ -133,46 +291,37 @@ if (-not (Test-Path $braveExe)) {
     return
 }
 
-$displayName = "{{- .profile -}}"
-# Try to resolve
-$folderName = Resolve-BraveProfileFolderName $displayName
-
-# If it doesn't exist, seed it
-if (-not $folderName) {
-    Write-Output "Seeding Brave profile for '$displayName'"
-
-    $folderNameGuess = "Profile $displayName"
-    $profileDirPath = Join-Path "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data" $folderNameGuess
-
-    # Create the folder explicitly if it doesn't exist
-    if (-not (Test-Path $profileDirPath)) {
-        New-Item -ItemType Directory -Path $profileDirPath | Out-Null
-    }
-
-    # Ensure no existing Brave process interferes
-    Get-Process brave* -ErrorAction SilentlyContinue | Stop-Process -Force
-    Start-Sleep -Milliseconds 500
-
-    # Launch Brave directly into that profile with a known URL
-    Start-Process $braveExe -ArgumentList "--user-data-dir=`"$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data`" --profile-directory=`"$folderNameGuess`" --new-window brave://settings/" -WindowStyle Hidden
-    Start-Sleep -Seconds 4
-
-    # Kill it again
-    Get-Process brave* -ErrorAction SilentlyContinue | Stop-Process -Force
-
-    # Try setting the display name
-    Set-BraveProfileDisplayName -folderName $folderNameGuess -desiredDisplayName $displayName
-
-    # Try resolving it again
-    $folderName = Resolve-BraveProfileFolderName $displayName
-
-    if (-not $folderName) {
-        Write-Warning "Unable to resolve Brave profile '$displayName' even after creation"
-        return
-    }
+# Make sure Brave has created "Local State" so profile lookups work
+$LocalState = "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data\Local State"
+if (-not (Test-Path $LocalState)) {
+    Get-Process brave* -EA SilentlyContinue | Stop-Process -Force
+    Start-Process $braveExe '--no-first-run --disable-features=ChromeWhatsNewUI --profile-directory="Default"' -WindowStyle Hidden
+    Start-Sleep 4
+    Get-Process brave* -EA SilentlyContinue | Stop-Process -Force
 }
 
 
+
+$displayName = "{{- .profile -}}"
+
+# DEBUG: show current profile entries
+$ls = "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data\Local State"
+if (Test-Path $ls) {
+  $root = Get-Content $ls -Raw | ConvertFrom-Json
+  $dbg = $root.profile.info_cache
+  if ($dbg) {
+    "info_cache keys: " + ($dbg.PSObject.Properties.Name -join ', ')
+    "display names:  " + (($dbg.PSObject.Properties | % { "$($_.Name)='$($dbg.$($_.Name).name)'" }) -join '; ')
+  } else {
+    "info_cache is empty or missing."
+  }
+}
+
+
+$folderName = Ensure-ProfileForDisplayName -DisplayName $displayName -BraveExe $braveExe
+if (-not $folderName) {
+    Write-Warning "Unable to provision a Brave profile for '$displayName'"; return
+}
 
 
 # Create shortcut
@@ -185,6 +334,30 @@ $shortcut.Save()
 Write-Output "Created/updated shortcut: $name"
 Write-Output "Icon was used from $iconLocation"
 
-{{- end }}
+# {{- end }}
 <# end app loop #>
-{{ end }}
+Write-Host "`n=== Final Brave profile state ==="
+$ls = "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\User Data\Local State"
+if (Test-Path $ls) {
+    try {
+        $root = Get-Content $ls -Raw | ConvertFrom-Json
+        $info = $root.profile.info_cache
+        if ($info) {
+            foreach ($k in $info.PSObject.Properties.Name) {
+                $name = $info.$k.name
+                Write-Host ("{0,-12} → {1}" -f $k, $name)
+            }
+        } else {
+            Write-Host "info_cache is empty or missing."
+        }
+    }
+    catch {
+        Write-Warning "Could not parse Local State: $($_.Exception.Message)"
+    }
+} else {
+    Write-Host "Local State file not found."
+    
+}
+
+# {{- end -}}
+# {{ end }}
