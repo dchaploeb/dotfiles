@@ -277,3 +277,6 @@ QToolTip {
 .notification-widget .icon.new-notification {
     color: var(--blue);
 }
+
+@import url('user-styles.css');
+
