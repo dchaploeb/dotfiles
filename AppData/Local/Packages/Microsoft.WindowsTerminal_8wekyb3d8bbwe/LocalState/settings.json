@@ -193,6 +193,13 @@
                 "hidden": false,
                 "name": "Nushell",
                 "source": "nu"
+            },
+            {
+                "commandline": "ssh david@digger.klatha.com",
+                "guid": "{ea9ba5b1-8c5b-4d87-b278-e8a0b4544a4d}",
+                "hidden": false,
+                "icon": "%LOCALAPPDATA%\\resources\\ssh-96.png",
+                "name": "digger.klatha.com"
             }
         ]
     },
