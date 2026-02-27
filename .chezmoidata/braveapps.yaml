@@ -14,7 +14,7 @@ brave_apps:
   profile: Personal
 - name: Google Chat
   url: https://chat.google.com
-  profile: Personal
+  profile: Personal 
 - name: WW Email
   url: https://mail.google.com/
   icondomain: https://weaversway.coop

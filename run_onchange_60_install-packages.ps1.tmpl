@@ -1,77 +1,54 @@
-{{ if eq .chezmoi.os "windows" -}}  
-    {{- if .winget -}}
-        # Step 1: List of package IDs we want to install
-        {{- $ids := (list) -}}
+# {{ if eq .chezmoi.os "windows" -}}  
+#     {{- if .winget -}}
+# List of package IDs we want to install
+#        {{- $ids := (list) -}}
 
 
-        {{- range .packages.windows.wingetcli }} 
-        {{- $ids = append $ids (quote .) -}}
-        {{- end }}
+#        {{- range .packages.windows.wingetcli }} 
+#        {{- $ids = append $ids (quote .) -}}
+#        {{- end }}
 
-        {{- if .install_apps }}
-        {{- range .packages.windows.wingetcli_apps }}
-            {{- $ids = append $ids (quote .) -}}
-        {{- end }}
-        {{- end }}
+#        {{- if .install_apps }}
+#        {{- range .packages.windows.wingetcli_apps }}
+#            {{- $ids = append $ids (quote .) -}}
+#        {{- end }}
+#        {{- end }}
 
-        {{- if .gui }}
-        {{- range .packages.windows.wingetgui }}
-            {{- $ids = append $ids (quote .) -}}
-        {{- end }}
-        {{- if .install_apps }}
-            {{- range .packages.windows.wingetgui_apps }}
-            {{- $ids = append $ids (quote .) -}}
-            {{- end }}
-        {{- end }}
-        {{- end }}
+#        {{- if .gui }}
+#        {{- range .packages.windows.wingetgui }}
+#            {{- $ids = append $ids (quote .) -}}
+#        {{- end }}
+#        {{- if .install_apps }}
+#            {{- range .packages.windows.wingetgui_apps }}
+#            {{- $ids = append $ids (quote .) -}}
+#            {{- end }}
+#        {{- end }}
+#        {{- end }}
 
-        $requestedPackageIds = @(
-        {{- range $i, $pkg := $ids -}}
-            {{ $pkg }}{{ if lt $i (sub (len $ids) 1) }},{{ end }}
-        {{- end }})
 
-       # ==============================================
-        # NEW Step 2/3: source-agnostic detection with config-driven alt IDs
-        # - Supports winget/msstore IDs, MSIX/Appx names & package family names
-        # - No package-specific code here; mappings live in .packages.windows.altIds
-        # ==============================================
+function Get-AltIds {
+    param([Parameter(Mandatory)][string]$Id)
 
-        # Step 2: Build alt-id map from config (msstore/msix/appx fallbacks)
-        $AltIdMap = @{}
-        {{- if .packages.windows.altIds }}
-        {{- range $wingetId, $alts := .packages.windows.altIds }}
-        $AltIdMap[{{ printf "%q" $wingetId }}] = @(
-        {{- range $i, $alt := $alts -}}
-          {{ printf "%q" $alt }}{{ if lt $i (sub (len $alts) 1) }},{{ end }}
-        {{- end }}
-        )
-        {{ end -}}
-        {{- end }}
+    $alts = New-Object System.Collections.Generic.List[string]
 
-        function Get-AltIds {
-            param([Parameter(Mandatory)][string]$Id)
+    # 1) From config
+    if ($AltIdMap.ContainsKey($Id)) {
+        foreach ($v in @($AltIdMap[$Id])) { [void]$alts.Add([string]$v) }
+    }
 
-            $alts = New-Object System.Collections.Generic.List[string]
-
-            # 1) From config
-            if ($AltIdMap.ContainsKey($Id)) {
-                foreach ($v in @($AltIdMap[$Id])) { [void]$alts.Add([string]$v) }
-            }
-
-            # 2) From winget show (generic discovery of Store ProductId)
-            $manifest = & winget show --id $Id -e 2>$null
-            if ($LASTEXITCODE -eq 0 -and $manifest) {
-                $match = ($manifest | Select-String 'Store ProductId:\s*(\S+)').Matches
-                if ($match.Count -gt 0) {
-                    $storeId = $match[0].Groups[1].Value
-                    if ($storeId) { $alts.Add($storeId) }
-                }
-            }
-
-            $alts = $alts.ToArray() | Select-Object -Unique
-            return $alts
+    # 2) From winget show (generic discovery of Store ProductId)
+    $manifest = & winget show --id $Id -e 2>$null
+    if ($LASTEXITCODE -eq 0 -and $manifest) {
+        $match = ($manifest | Select-String 'Store ProductId:\s*(\S+)').Matches
+        if ($match.Count -gt 0) {
+            $storeId = $match[0].Groups[1].Value
+            if ($storeId) { $alts.Add($storeId) }
         }
+    }
 
+    $alts = $alts.ToArray() | Select-Object -Unique
+    return $alts
+}
 
 # ==============================================
 # NEW: Detection status helper (generic)
@@ -82,81 +59,106 @@ function Resolve-InstalledStatus {
 
     # 1) Exact winget ID
     $null = & winget list --id $Id -e 2>$null
-    if ($LASTEXITCODE -eq 0) { return [pscustomobject]@{ Installed=$true; MatchId=$Id; Method='winget-id' } }
+    if ($LASTEXITCODE -eq 0) { return [pscustomobject]@{ Installed = $true; MatchId = $Id; Method = 'winget-id' } }
 
     # 2) Alternates (from config + discovered)
     foreach ($alt in (Get-AltIds -Id $Id)) {
         $null = & winget list --id $alt -e 2>$null
-        if ($LASTEXITCODE -eq 0) { return [pscustomobject]@{ Installed=$true; MatchId=$alt; Method='winget-alt' } }
+        if ($LASTEXITCODE -eq 0) { return [pscustomobject]@{ Installed = $true; MatchId = $alt; Method = 'winget-alt' } }
         try {
             $pkgByName = Get-AppxPackage -Name $alt -ErrorAction SilentlyContinue
-            if ($pkgByName) { return [pscustomobject]@{ Installed=$true; MatchId=$pkgByName.Name; Method='appx-name' } }
-            $pkgByFam  = Get-AppxPackage -PackageFamilyName $alt -ErrorAction SilentlyContinue
-            if ($pkgByFam)  { return [pscustomobject]@{ Installed=$true; MatchId=$pkgByFam.PackageFamilyName; Method='appx-family' } }
-        } catch { }
+            if ($pkgByName) { return [pscustomobject]@{ Installed = $true; MatchId = $pkgByName.Name; Method = 'appx-name' } }
+            $pkgByFam = Get-AppxPackage -PackageFamilyName $alt -ErrorAction SilentlyContinue
+            if ($pkgByFam) { return [pscustomobject]@{ Installed = $true; MatchId = $pkgByFam.PackageFamilyName; Method = 'appx-family' } }
+        }
+        catch { }
     }
 
     # 3) Final Appx try using original Id
     try {
         $pkg = Get-AppxPackage -Name $Id -ErrorAction SilentlyContinue
-        if ($pkg) { return [pscustomobject]@{ Installed=$true; MatchId=$pkg.Name; Method='appx-name' } }
+        if ($pkg) { return [pscustomobject]@{ Installed = $true; MatchId = $pkg.Name; Method = 'appx-name' } }
         $pkg = Get-AppxPackage -PackageFamilyName $Id -ErrorAction SilentlyContinue
-        if ($pkg) { return [pscustomobject]@{ Installed=$true; MatchId=$pkg.PackageFamilyName; Method='appx-family' } }
-    } catch { }
+        if ($pkg) { return [pscustomobject]@{ Installed = $true; MatchId = $pkg.PackageFamilyName; Method = 'appx-family' } }
+    }
+    catch { }
 
-    return [pscustomobject]@{ Installed=$false; MatchId=$null; Method=$null }
+    return [pscustomobject]@{ Installed = $false; MatchId = $null; Method = $null }
 }
 
 
-        function Test-InstalledAny {
-            param([Parameter(Mandatory)][string]$Id)
+function Test-InstalledAny {
+    param([Parameter(Mandatory)][string]$Id)
 
-            # A) Exact winget ID
-            $null = & winget list --id $Id -e 2>$null
-            if ($LASTEXITCODE -eq 0) { return $true }
+    # A) Exact winget ID
+    $null = & winget list --id $Id -e 2>$null
+    if ($LASTEXITCODE -eq 0) { return $true }
 
-            # B) Try all alternates (config + discovered)
-            foreach ($alt in (Get-AltIds -Id $Id)) {
-                # Try winget first
-                $null = & winget list --id $alt -e 2>$null
-                if ($LASTEXITCODE -eq 0) { return $true }
+    # B) Try all alternates (config + discovered)
+    foreach ($alt in (Get-AltIds -Id $Id)) {
+        # Try winget first
+        $null = & winget list --id $alt -e 2>$null
+        if ($LASTEXITCODE -eq 0) { return $true }
 
-                # If alt looks like MSIX/Appx, ask Windows directly
-                try {
-                    $pkgByName = Get-AppxPackage -Name $alt -ErrorAction SilentlyContinue
-                    if ($pkgByName) { return $true }
-                    $pkgByFam  = Get-AppxPackage -PackageFamilyName $alt -ErrorAction SilentlyContinue
-                    if ($pkgByFam)  { return $true }
-                } catch { }
-            }
-
-            # C) Final try as Appx by original Id (in case caller passed an Appx name)
-            try {
-                if (Get-AppxPackage -Name $Id -ErrorAction SilentlyContinue) { return $true }
-                if (Get-AppxPackage -PackageFamilyName $Id -ErrorAction SilentlyContinue) { return $true }
-            } catch { }
-
-            return $false
+        # If alt looks like MSIX/Appx, ask Windows directly
+        try {
+            $pkgByName = Get-AppxPackage -Name $alt -ErrorAction SilentlyContinue
+            if ($pkgByName) { return $true }
+            $pkgByFam = Get-AppxPackage -PackageFamilyName $alt -ErrorAction SilentlyContinue
+            if ($pkgByFam) { return $true }
         }
+        catch { }
+    }
 
-        # Step 3: Install anything missing (drive by winget ID only)
-        function Install-WingetIfMissing {
-            param([Parameter(Mandatory)][string]$Id)
+    # C) Final try as Appx by original Id (in case caller passed an Appx name)
+    try {
+        if (Get-AppxPackage -Name $Id -ErrorAction SilentlyContinue) { return $true }
+        if (Get-AppxPackage -PackageFamilyName $Id -ErrorAction SilentlyContinue) { return $true }
+    }
+    catch { }
 
-            if (Test-InstalledAny -Id $Id) { return }
-            & winget install -h -e --no-upgrade --accept-source-agreements --accept-package-agreements --id $Id
-        }
+    return $false
+}
 
+# Install anything missing (drive by winget ID only)
+function Install-WingetIfMissing {
+    param([Parameter(Mandatory)][string]$Id)
 
+    if (Test-InstalledAny -Id $Id) { return }
+    & winget install -h -e --no-upgrade --accept-source-agreements --accept-package-agreements --id $Id
+}
+
+Write-Host "Running windows package script..."
+$requestedPackageIds = @({{ range $i, $pkg := $ids }}{{ $pkg }}{{ if lt $i (sub (len $ids) 1) }},{{ end }}{{ end }})
+
+# Source-agnostic detection with config-driven alt IDs
+# - Supports winget/msstore IDs, MSIX/Appx names & package family names
+# - No package-specific code here; mappings live in .packages.windows.altIds
+
+Write-Host "Building config file map..."
+# Build alt-id map from config (msstore/msix/appx fallbacks)
+$AltIdMap = @{}
+#       {{- if .packages.windows.altIds }}
+#       {{- range $wingetId, $alts := .packages.windows.altIds }}
+$AltIdMap[{{ printf "%q" $wingetId }}] = @({{ range $i, $alt := $alts }}{{ printf "%q" $alt }}{{ if lt $i (sub (len $alts) 1) }},{{ end }}{{ end }})
+#       {{ end }}
+#       {{- end }}
+Write-Host "Finished building config file map..."
+
+Write-Host "Listing winget packages..."
 # 0) Snapshot of **ALL** currently installed via winget (as before)
 # Generate legacy winget-only list (all installed winget packages)
 $allWinGet  = Get-WinGetPackage 2>$null
+Write-Host "Filtering..."
 $wingetOnly = $allWinGet | Where-Object { $_.Source -eq "winget" }
+Write-Host "Saving winget_packages.txt..."
 ($wingetOnly | Select-Object -ExpandProperty Id | Sort-Object) |
     Set-Content -Encoding UTF8 "winget_packages.txt"
+Write-Host "Saving winget_packages.csv..."
 $wingetOnly | Select-Object Id, Name, Version | Sort-Object Id |
     Export-Csv -Encoding UTF8 -NoTypeInformation "winget_packages.csv"
 
+Write-Host "Populating missing source values..."
 # Populate missing source values for ARP and MSIX/Appx separately
 $allWinGet | ForEach-Object {
     if (-not $_.Source -or $_.Source -eq '') {
@@ -167,9 +169,11 @@ $allWinGet | ForEach-Object {
         }
     }
 }
+Write-Host "Writing winget_all_sources.csv..."
 $allWinGet | Select-Object Source, Id, Name, Version | Sort-Object Source, Id |
     Export-Csv -Encoding UTF8 -NoTypeInformation "winget_all_sources.csv"
 
+Write-Host "Installing packages..."
 # 1) Detect + install requested packages with rich reporting
 $DetectionResults = @()
 foreach ($id in $requestedPackageIds) {
@@ -185,6 +189,7 @@ foreach ($id in $requestedPackageIds) {
     }
 }
 
+Write-Host "Writing reports..."
 # 2) Outputs based on detection (can include msstore/msix/appx matches)
 $DetectionResults |
     Where-Object { $_.Installed -and $_.MatchId } |
@@ -196,5 +201,5 @@ $DetectionResults |
     Sort-Object RequestedId |
     Export-Csv -NoTypeInformation -Encoding UTF8 "installed_detected.csv"
 
-    {{ end -}}
-{{ end -}}
+#     {{ end -}}
+# {{ end -}}
