@@ -4,10 +4,6 @@
     "actions": 
     [
         {
-            "command": "find",
-            "id": "User.find"
-        },
-        {
             "command": 
             {
                 "action": "splitPane",
@@ -15,6 +11,10 @@
                 "splitMode": "duplicate"
             },
             "id": "User.splitPane.A6751878"
+        },
+        {
+            "command": "find",
+            "id": "User.find"
         },
         {
             "command": "paste",
@@ -41,12 +41,12 @@
             "keys": "alt+shift+d"
         },
         {
-            "id": "User.paste",
-            "keys": "ctrl+v"
-        },
-        {
             "id": "User.find",
             "keys": "ctrl+shift+f"
+        },
+        {
+            "id": "User.paste",
+            "keys": "ctrl+v"
         },
         {
             "id": "User.copy.644BA8F2",
@@ -200,6 +200,12 @@
                 "hidden": false,
                 "icon": "%LOCALAPPDATA%\\resources\\ssh-96.png",
                 "name": "digger.klatha.com"
+            },
+            {
+                "guid": "{4a262823-d839-54f4-aabd-f0cb51e01fac}",
+                "hidden": false,
+                "name": "podman-machine-default",
+                "source": "Microsoft.WSL"
             }
         ]
     },
