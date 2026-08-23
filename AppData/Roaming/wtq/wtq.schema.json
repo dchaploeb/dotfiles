@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "WtqOptions",
+  "title": ":material-earth: Global options",
   "type": "object",
   "description": "Defines WTQ-wide options, including the list of configured apps.",
   "additionalProperties": false,
@@ -10,7 +10,7 @@
   "properties": {
     "AttachMode": {
       "title": "Attach mode",
-      "description": "How WTQ should get to an instance of a running app.\nI.e. whether to start an app instance if one cannot be found.",
+      "description": "How WTQ should get to an instance of a running app.\n\nI.e. whether to start an app instance if one cannot be found.",
       "default": "FindOrStart",
       "oneOf": [
         {
@@ -61,9 +61,22 @@
         "integer",
         "null"
       ],
-      "description": "Make the window see-through (applies to the entire window, including the title bar).\n0 (invisible) - 100 (opaque).",
+      "description": "Make the window see-through (applies to the entire window, including the title bar).\n\n0 (invisible) - 100 (opaque).",
       "format": "int32",
       "default": 100
+    },
+    "Resize": {
+      "title": "Resize app window",
+      "description": "Whether to resize the app window when toggling onto the screen. Used to adhere to settings like horizontal screen coverage.\n\nBy setting this to Never, the app window size will be maintained.\n\nThis is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a\nwindow clears its contents (seems to be most common with Electron apps).",
+      "default": "Always",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/Resizing"
+        }
+      ]
     },
     "HorizontalScreenCoverage": {
       "title": "Horizontal screen coverage",
@@ -116,14 +129,14 @@
         "array",
         "null"
       ],
-      "description": "When moving an app off the screen, WTQ looks for an empty space to move the window to.\nDepending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.\nBy default, WTQ looks for empty space in this order: Above, Below, Left, Right.",
+      "description": "When moving an app off the screen, WTQ looks for an empty space to move the window to.\n\nDepending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.\n\nBy default, WTQ looks for empty space in this order: Above, Below, Left, Right.\n\nIf no free space can be found in any of the specified locations, the app will just blink on- and off the screen,\nwithout any animation.",
       "items": {
         "$ref": "#/definitions/OffScreenLocation"
       }
     },
     "PreferMonitor": {
       "title": "Prefer monitor",
-      "description": "Which monitor to preferably drop the app.",
+      "description": "Which monitor to preferably toggle the app onto.",
       "default": "WithCursor",
       "oneOf": [
         {
@@ -140,7 +153,7 @@
         "integer",
         "null"
       ],
-      "description": "If PreferMonitor is set to AtIndex, this setting determines what monitor to choose.\nZero based, e.g. 0, 1, etc.",
+      "description": "If PreferMonitor is set to AtIndex, this setting determines what monitor to choose.\n\nZero based, e.g. 0, 1, etc.",
       "format": "int32",
       "default": 0,
       "maximum": 10.0,
@@ -194,37 +207,18 @@
     },
     "$schema": {
       "type": "string",
-      "description": "Path to wtq.schema.json.\nUsed for adding intellisense-like features to editors that support JSON schema (such as VSCode)."
+      "description": "Path to wtq.schema.json.\n\nUsed for adding intellisense-like features to editors that support JSON schema (such as VSCode).\n\nFixed value, changes to this property in the wtq.jsonc will be ignored/overwritten."
     },
     "Apps": {
       "type": "array",
-      "description": "Applications to enable Quake-style dropdown for.",
-      "x-example": {
-        "Apps": [
-          {
-            "Name": "App 1"
-          },
-          {
-            "Name": "App 2"
-          }
-          /* ...*/
-        ]
-      },
+      "description": "Applications to enable Quake-style dropdown for.\n\nSee the Examples page or the docs for some examples.",
       "items": {
         "$ref": "#/definitions/WtqAppOptions"
       }
     },
     "Hotkeys": {
       "type": "array",
-      "description": "Global hotkeys, that toggle either the first, or the most recently toggled app.\nOptional.",
-      "x-example": {
-        "Hotkeys": [
-          {
-            "Modifiers": "Control",
-            "Key": "Q"
-          }
-        ]
-      },
+      "description": "Global hotkeys, that toggle either the first, or the most recently toggled app.",
       "items": {
         "$ref": "#/definitions/HotkeyOptions"
       }
@@ -235,14 +229,15 @@
         "integer",
         "null"
       ],
-      "description": "How many frames per second the animation should be.\nNote that this may not be hit if moving windows takes too long, hence \"target\" fps.\nMust be between 5 and 120, to prevent issues that can arise with values that are too low or too high.",
+      "description": "How many frames per second the animation should be.\n\nNote that this may not be hit if moving windows takes too long, hence \"target\" FPS.\n\nMust be between 5 and 120, to prevent issues that can arise with values that are too low or too high.",
       "format": "int32",
       "default": 40,
       "maximum": 120.0,
       "minimum": 5.0
     },
     "Api": {
-      "description": "Options related to the HTTP API, that can be used to control WTQ programmatically.",
+      "title": "API",
+      "description": "WTQ comes with an HTTP API (disabled by default), that can be used to control WTQ programmatically.\n\nSee the docs for more information and usage examples.",
       "oneOf": [
         {
           "type": "null"
@@ -254,7 +249,7 @@
     },
     "FeatureFlags": {
       "title": "Feature flags",
-      "description": "Sometimes functionality is added or changed that carries more risk of introducing bugs.\n\nFor these cases, such functionality can be put behind a \"feature flag\", which makes them opt-in or opt-out.\nThat way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),\nbut still have a way back should things go awry.",
+      "description": "Sometimes functionality is added or changed that carries more risk of introducing bugs.\n\nFor these cases, such functionality can be put behind a \"feature flag\", which makes them opt-in or opt-out.\n\nThat way, we can still merge to master, and make it part of the stable release version (reducing branches, dev builds, etc.),\nbut still have a way back should things go awry, without reverting to a previous version.",
       "oneOf": [
         {
           "type": "null"
@@ -272,6 +267,19 @@
       ],
       "description": "Whether to show the GUI when WTQ is started.",
       "default": false
+    },
+    "TrayIconStyle": {
+      "title": "Tray icon (color) style",
+      "description": "The tray icon (color) style (dark/light).",
+      "default": "Auto",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/TrayIconStyle"
+        }
+      ]
     }
   },
   "definitions": {
@@ -325,6 +333,20 @@
         "AlwaysHidden",
         "AlwaysVisible",
         "WhenAppVisible"
+      ]
+    },
+    "Resizing": {
+      "type": "string",
+      "description": "Whether- and when to resize app windows.",
+      "x-enumNames": [
+        "None",
+        "Always",
+        "Never"
+      ],
+      "enum": [
+        "None",
+        "Always",
+        "Never"
       ]
     },
     "HorizontalAlign": {
@@ -403,7 +425,8 @@
       "additionalProperties": false,
       "required": [
         "EventPattern",
-        "FileName"
+        "FileName",
+        "WorkingDirectory"
       ],
       "properties": {
         "EventPattern": {
@@ -423,12 +446,31 @@
           "type": "array",
           "description": "Command-line arguments that should be passed to the process when it's started.",
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/ProcessArgument"
           }
+        },
+        "WorkingDirectory": {
+          "title": "Working directory",
+          "type": "string",
+          "description": "Working directory when starting a new process.\n\nUseful if the filename isn't available through PATH.",
+          "minLength": 1
+        }
+      }
+    },
+    "ProcessArgument": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Argument": {
+          "type": [
+            "null",
+            "string"
+          ]
         }
       }
     },
     "WtqAppOptions": {
+      "title": ":material-application-outline: App options",
       "type": "object",
       "description": "Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).",
       "additionalProperties": false,
@@ -439,7 +481,7 @@
       "properties": {
         "AttachMode": {
           "title": "Attach mode",
-          "description": "How WTQ should get to an instance of a running app.\nI.e. whether to start an app instance if one cannot be found.",
+          "description": "How WTQ should get to an instance of a running app.\n\nI.e. whether to start an app instance if one cannot be found.",
           "default": "FindOrStart",
           "oneOf": [
             {
@@ -490,9 +532,22 @@
             "integer",
             "null"
           ],
-          "description": "Make the window see-through (applies to the entire window, including the title bar).\n0 (invisible) - 100 (opaque).",
+          "description": "Make the window see-through (applies to the entire window, including the title bar).\n\n0 (invisible) - 100 (opaque).",
           "format": "int32",
           "default": 100
+        },
+        "Resize": {
+          "title": "Resize app window",
+          "description": "Whether to resize the app window when toggling onto the screen. Used to adhere to settings like horizontal screen coverage.\n\nBy setting this to Never, the app window size will be maintained.\n\nThis is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a\nwindow clears its contents (seems to be most common with Electron apps).",
+          "default": "Always",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/Resizing"
+            }
+          ]
         },
         "HorizontalScreenCoverage": {
           "title": "Horizontal screen coverage",
@@ -545,14 +600,14 @@
             "array",
             "null"
           ],
-          "description": "When moving an app off the screen, WTQ looks for an empty space to move the window to.\nDepending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.\nBy default, WTQ looks for empty space in this order: Above, Below, Left, Right.",
+          "description": "When moving an app off the screen, WTQ looks for an empty space to move the window to.\n\nDepending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.\n\nBy default, WTQ looks for empty space in this order: Above, Below, Left, Right.\n\nIf no free space can be found in any of the specified locations, the app will just blink on- and off the screen,\nwithout any animation.",
           "items": {
             "$ref": "#/definitions/OffScreenLocation"
           }
         },
         "PreferMonitor": {
           "title": "Prefer monitor",
-          "description": "Which monitor to preferably drop the app.",
+          "description": "Which monitor to preferably toggle the app onto.",
           "default": "WithCursor",
           "oneOf": [
             {
@@ -569,7 +624,7 @@
             "integer",
             "null"
           ],
-          "description": "If PreferMonitor is set to AtIndex, this setting determines what monitor to choose.\nZero based, e.g. 0, 1, etc.",
+          "description": "If PreferMonitor is set to AtIndex, this setting determines what monitor to choose.\n\nZero based, e.g. 0, 1, etc.",
           "format": "int32",
           "default": 0,
           "maximum": 10.0,
@@ -623,11 +678,8 @@
         },
         "Name": {
           "type": "string",
-          "description": "A logical name for the app, used to identify it across config reloads.\nAppears in logs.",
-          "minLength": 1,
-          "x-example": {
-            "Name": "Terminal"
-          }
+          "description": "A logical name for the app, used to identify it across config reloads, and it appears in logs.",
+          "minLength": 1
         },
         "Hotkeys": {
           "type": "array",
@@ -639,8 +691,31 @@
         "FileName": {
           "title": "Filename",
           "type": "string",
-          "description": "The filename to use when starting a new process for the app.\nE.g. notepad, dolphin, etc.",
+          "description": "The filename to use when starting a new process for the app. If no process name is set,\nthe value of this property is also used to match against the names of running processes (to find the process to attach to).\n\nE.g. notepad, dolphin, etc.\n\nNote that (if the app is not in the OS PATH), you can also put absolute paths in here,\nor specify the working directory through working directory.\n\nSee the Examples page for, well, examples.",
           "minLength": 1
+        },
+        "Arguments": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Command-line arguments that should be passed to the app when it's started.\n\nNote that this only applies when using an AttachMode that starts the app.\n\nThis is mostly here for backward-compatibility reasons. Prefer argument list,\nwhich handles complex arguments and escaping better."
+        },
+        "ArgumentList": {
+          "title": "Argument list",
+          "type": "array",
+          "description": "Command-line arguments that should be passed to the app when it's started.\n \nNote that this only applies when using an AttachMode that starts the app (i.e., when WTQ actually starts the app).",
+          "items": {
+            "$ref": "#/definitions/ProcessArgument"
+          }
+        },
+        "WorkingDirectory": {
+          "title": "Working directory",
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Working directory when starting a new process.\n\nUseful if the filename isn't available through PATH."
         },
         "ProcessName": {
           "title": "Process name",
@@ -648,38 +723,20 @@
             "null",
             "string"
           ],
-          "description": "Apps sometimes have process names different from their filenames.\nThis field can be used to look for the process name in such cases. Windows Terminal is an\nexample, with filename wt, and process name WindowsTerminal.",
-          "x-example": {
-            "Apps": {
-              "Filename": "wt",
-              "ProcessName": "WindowsTerminal"
+          "description": "Apps sometimes have process names different from their filenames.\n\nThis field can be used to look for the process name in such cases. Windows Terminal is an\nexample, with filename wt, and process name WindowsTerminal.\n\nSupports regular expressions.\n\nAlso see the Examples page for more cases where this is relevant, and the Windows page on how to find values."
+        },
+        "MainWindow": {
+          "title": "Main window",
+          "description": "(Windows only) Matches only \"main\" windows; the initial window a process spawns.\n\nWhen a process spawns multiple windows, 1 is usually the \"main\" window. In many cases, this is also the window\nthat you'd want to use WTQ with. Non-main-windows are usually child windows like popups and such.\n\nWhen the other (non-main) windows cannot be easily differentiated from the main window (for example through\nthe window class or -title), the \"is-main-window\"-property can be very useful to home in on the desired window.\n\nA common example of an app where this would not help, is a browser, that can spawn tons of windows on the same process name.",
+          "default": "Either",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/MainWindowState"
             }
-          }
-        },
-        "Arguments": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "description": "Command-line arguments that should be passed to the app when it's started.\nNote that this only applies when using an AttachMode that starts the app."
-        },
-        "ArgumentList": {
-          "title": "Argument list",
-          "type": "array",
-          "description": "Command-line arguments that should be passed to the app when it's started.\nNote that this only applies when using an AttachMode that starts the app.",
-          "x-example": {
-            "Apps": [
-              {
-                "ArgumentList": [
-                  "--allow-screencapture",
-                  "--debug-info"
-                ]
-              }
-            ]
-          },
-          "items": {
-            "$ref": "#/definitions/ProcessArgument"
-          }
+          ]
         },
         "WindowClass": {
           "title": "Window class",
@@ -687,7 +744,7 @@
             "null",
             "string"
           ],
-          "description": "(Windows only) Matches windows based on their Win32 Window Class."
+          "description": "(Windows only) Matches windows based on their Win32 Window Class.\n\nSupports regular expressions.\n\nA common example of an app where this would not help, is a browser, that can spawn tons of windows on the same process name."
         },
         "WindowTitle": {
           "title": "Window title",
@@ -695,7 +752,7 @@
             "null",
             "string"
           ],
-          "description": "Match windows based on their title (sometimes referred to as \"caption\")."
+          "description": "Match windows based on their title (sometimes referred to as \"caption\").\n\nSupports regular expressions."
         },
         "WindowTitleOverride": {
           "title": "Window title override",
@@ -703,13 +760,13 @@
             "null",
             "string"
           ],
-          "description": "Attempt to set the window title to a specific value.\nUseful for cases where multiple programs control window placement (such as when\nusing WTQ together with a window manager) and the window title can be used to\nopt-out in the other program."
+          "description": "Attempt to set the window title to a specific value.\n\nUseful for cases where multiple programs control window placement (such as when using WTQ together with a window manager)\nand the window title can be used to opt-out in the other program.\n\nNote that this doesn't work for all windows, as it depends on factors like the app's GUI toolkit."
         }
       }
     },
     "HotkeyOptions": {
       "type": "object",
-      "description": "Defines a combination of a Keys value, with optional KeyModifiers, used for mapping a shortcut to an action.",
+      "description": "Defines a combination of a KeyCode value, with optional KeyModifiers, used for mapping a shortcut to an action.",
       "additionalProperties": false,
       "properties": {
         "Modifiers": {
@@ -741,7 +798,7 @@
     },
     "KeyModifiers": {
       "type": "string",
-      "description": "Alt, control, etc.\nNamed plurally, as it can contain multiple values.",
+      "description": "Alt, control, etc.\nNamed plurally, as it can contain multiple values.\nSeparate multiple values with commas, e.g. \"Control, Alt\".",
       "x-enumFlags": true,
       "x-enumNames": [
         "None",
@@ -1118,17 +1175,21 @@
         "OemClear"
       ]
     },
-    "ProcessArgument": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Argument": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+    "MainWindowState": {
+      "type": "string",
+      "description": "How being the \"main-window\" affects attaching.\nI.e. should WTQ attach to main windows only, non-main windows only, or either.",
+      "x-enumNames": [
+        "None",
+        "MainWindowOnly",
+        "NonMainWindowOnly",
+        "Either"
+      ],
+      "enum": [
+        "None",
+        "MainWindowOnly",
+        "NonMainWindowOnly",
+        "Either"
+      ]
     },
     "WtqApiOptions": {
       "type": "object",
@@ -1140,8 +1201,11 @@
           "description": "Whether the HTTP API is enabled at all."
         },
         "Urls": {
-          "type": "array",
-          "description": "The addresses on which the HTTP API will listen.\nOn Windows, this defaults to a named pipe, with name \"wtq\".\nOn Linux, this defaults to a Unix socket, at /tmp/wtq.sock.\n\nA regular socket can also be used, e.g. \"http://127.0.0.1:8998\".",
+          "type": [
+            "array",
+            "null"
+          ],
+          "description": "The addresses on which the HTTP API will listen.\nOn Windows, this defaults to a named pipe, with name \"wtq\".\nOn Linux, this defaults to a Unix socket, at /run/user/USERNAME/wtq/wtq.sock.\n\nA regular socket can also be used, e.g. \"http://127.0.0.1:7997\".",
           "items": {
             "type": "string"
           }
@@ -1153,15 +1217,27 @@
       "description": "Sometimes functionality is added or changed that carries more risk of introducing bugs.\n\nFor these cases, such functionality can be put behind a \"feature flag\", which makes them opt-in or opt-out.\nThat way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),\nbut still have a way back should things go awry.",
       "additionalProperties": false,
       "properties": {
-        "NewWindowCapture": {
-          "type": "boolean",
-          "description": "(Windows only) Switches to finding- and capturing windows starting from the _window_, instead of from the _process_.\nEnables attaching to windows other than an application's main window (useful for browsers, for example), and other\ncases where a single process spawns a bunch of windows (like the Windows file explorer, which is part of the \"explorer\" process).\n\nPretty radically different from the previous implementation, so we're feature-flagging it for a while."
-        },
         "SharpHook": {
           "type": "boolean",
           "description": "(Windows only) Switches the hotkey subsystem to using SharpHook, instead of registering through an invisible WinForm's window message loop.\nEnables more keys (such as the \"Windows\", or \"Meta\", or \"Super\" modifier).\n\nWhile implementing this, some subtle issues were encountered. Although all the known ones have been fixed, it's enough of a change that we're feature-flagging it for a while."
         }
       }
+    },
+    "TrayIconStyle": {
+      "type": "string",
+      "description": "Style of the tray icon (i.e. light or dark).",
+      "x-enumNames": [
+        "None",
+        "Auto",
+        "Dark",
+        "Light"
+      ],
+      "enum": [
+        "None",
+        "Auto",
+        "Dark",
+        "Light"
+      ]
     }
   }
 }
