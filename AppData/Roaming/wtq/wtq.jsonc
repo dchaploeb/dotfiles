@@ -1,42 +1,57 @@
 {
-    "$schema": "wtq.schema.json", // Not necessary, but provides autocompletion when supported by the editor.
-    "Apps": [
-        // Brave - Google Calendar
-        {
-            "Name": "Google Calendar",
-            "Hotkeys": [
-                {
-                    "Modifiers": "Control,Alt",
-                    "Key": "Q"
-                }
-            ],
-            "FileName": "brave",
-            "ArgumentList": [
-                {
-                    "Argument": "--app=https://calendar.google.com"
-                }
-            ],
-            "WindowTitle": ".*Weavers Way - Calendar.*"
-        },
-        // Brave - GMail
-        {
-            "Name": "GMail",
-            "Hotkeys": [
-                {
-                    "Modifiers": "Control,Alt",
-                    "Key": "K"
-                }
-            ],
-            "FileName": "brave",
-            "ArgumentList": [
-                {
-                    "Argument": "--app=https://mail.google.com"
-                }
-            ],
-            "WindowTitle": ".*Weavers Way Mail.*"
-        }
-    ],
-    "FeatureFlags": {
-        "NewWindowCapture": true // Necessary to allow matching individual windows, regardless of parent process.
-    }
+	"$schema": "wtq.schema.json",
+	"Apps": [
+		{
+			"Name": "Google Calendar",
+			"Hotkeys": [
+				{
+					"Modifiers": "Alt, Control",
+					"Key": "Q"
+				},
+				{
+					"Modifiers": "Control",
+					"KeyChar": "F2"
+				}
+			],
+			"FileName": "brave.exe",
+			"ArgumentList": [
+				{
+					"Argument": "--app=https://calendar.google.com"
+				}
+			],
+			"WindowTitle": ".*Google Calendar.*"
+		},
+		{
+			"Name": "Proton Mail",
+			"Hotkeys": [
+				{
+					"Modifiers": "Alt, Control",
+					"Key": "K"
+				}
+			],
+			"FileName": "brave",
+			"ArgumentList": [
+				{
+					"Argument": "--app=https://mail.proton.me"
+				}
+			],
+			"WindowTitle": ".*Proton Mail.*",
+			"TaskbarIconVisibility": "AlwaysVisible"
+		},
+		{
+			"Name": "KeePassXC",
+			"Hotkeys": [
+				{
+					"Modifiers": "Alt, Control",
+					"KeyChar": "P"
+				}
+			],
+			"FileName": "keepassxc"
+		},
+		{
+			"Name": "Windows Terminal",
+			"FileName": "wt",
+			"ProcessName": "^WindowsTerminal$"
+		}
+	]
 }
