@@ -26,6 +26,10 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+if [ -d "$HOME/code/mdb/coop-scripts" ] ; then
+    PATH="$HOME/code/mdb/coop-scripts:$PATH"
+fi
+
 if [ -n "$PS1" ] && [ -d "$HOME/chezmoi/.git" ]; then
     (
         cd "$HOME/chezmoi"
