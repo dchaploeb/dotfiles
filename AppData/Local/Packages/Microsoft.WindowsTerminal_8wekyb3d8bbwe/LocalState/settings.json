@@ -122,6 +122,13 @@
                 "name": "c2.weaversway.coop"
             },
             {
+                "commandline": "ssh david@c3.weaversway.coop",
+                "guid": "{390cc0be-15ab-4441-90c8-9f6dc45f73f8}",
+                "hidden": false,
+                "icon": "%LOCALAPPDATA%\\resources\\ssh-96.png",
+                "name": "c3.weaversway.coop"
+            },
+            {
                 "commandline": "%SystemRoot%\\System32\\cmd.exe",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
