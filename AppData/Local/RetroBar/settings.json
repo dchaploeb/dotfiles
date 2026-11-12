@@ -58,7 +58,7 @@
   "CheckForUpdates": true,
   "ShowExitMenuItem": true,
   "ShowEndTaskButton": false,
-  "ShowStartButtonMultiMon": false,
+  "ShowStartButtonMultiMon": true,
   "AutoHideTransparent": false,
   "SlideTaskbarButtons": true,
   "ShowClockSeconds": false,
