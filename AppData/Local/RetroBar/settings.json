@@ -37,7 +37,9 @@
       "Behavior": 2
     }
   ],
+  "NotifyIconOrder": [],
   "AllowFontSmoothing": true,
+  "AllowFontSmoothingMenu": true,
   "UseSoftwareRendering": true,
   "Edge": 3,
   "RowCount": 2,
@@ -63,5 +65,6 @@
   "SlideTaskbarButtons": true,
   "ShowClockSeconds": false,
   "WinNumHotkeysAction": 0,
+  "AllowBlurBehind": true,
   "PinnedNotifyIcons": []
 }
