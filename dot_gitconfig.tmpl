@@ -1,6 +1,10 @@
 [user]
 	name = David Chaplin-Loebell
-	email = davidcl@weaversway.coop
+	email = david@dcl.earth
+[includeIf "hasconfig:remote.*.url:git@ssh.bitbucket.org:weaversway/**"]
+    path = ~/.gitconfig-weaversway
+[includeIf "hasconfig:remote.*.url:git@bitbucket.org:weaversway/**"]
+    path = ~/.gitconfig-weaversway
 [credential "https://github.com"]
 	helper = 
 	helper = !/usr/bin/gh auth git-credential
