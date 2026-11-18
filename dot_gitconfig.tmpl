@@ -13,10 +13,18 @@
 {{- if .gui }}
 	editor = code --wait
 {{- else }}
-        editor = nano
-{{ end }}
-        pager = cat
+    editor = nano
+{{- end }}
+    pager = cat
 [commit]
 	verbose = true
 [merge]
-        log = 10
+    log = 10
+[alias]
+	recent = log --oneline --name-status -n 9
+[help]
+{{- if .gui }}
+	format = web
+{{- else }}
+    format = man
+{{ end }}
